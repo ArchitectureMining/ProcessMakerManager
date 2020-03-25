@@ -15,7 +15,7 @@ if (mysqli_connect_errno()) {
 }
 
 // Check the actions
-if (isset($_POST['action']) && in_array(strtolower($_POST['action']), array('delete', 'resetpw', 'backup','create', 'restore')) {
+if (isset($_POST['action']) && in_array(strtolower($_POST['action']), array('delete', 'resetpw', 'backup','create', 'restore'))) {
   $wid = $_POST['wid'];
 
   $stmt = $con->prepare('SELECT id, name, status FROM workspace WHERE status < 3 AND user=? AND id= ?');
@@ -66,7 +66,7 @@ if ($stmt->num_rows > 0) {
 
 // Get all workspaces in an array
 $workspaces = array();
-$stmt = $con->prepare('SELECT id, name, status FROM workspace WHERE status < 2 AND user=?');
+$stmt = $con->prepare('SELECT id, name, status FROM workspace WHERE status < 3 AND user=?');
 $stmt->bind_param('i', $_SESSION['user']);
 $stmt->execute();
 $stmt->store_result();
@@ -129,7 +129,7 @@ foreach($workspaces as $w) { ?>
 		            <td><?php if ($w['status'] < 1) { ?>
                   <?php echo $w['name'] . ' (being created)'; ?>
                 <?php } else { ?>
-                  <a href="https://pais.science.uu.nl/sys<?php echo $w['id']?>/en/neoclassic/login/login" target="_blank"><?php echo $w['name'] ?> <?php if ($w['status'] == 2) } ?> (action requested) <?php }?> </a></td>
+                  <a href="https://pais.science.uu.nl/sys<?php echo $w['id']?>/en/neoclassic/login/login" target="_blank"><?php echo $w['name'] ?></a> <?php if ($w['status'] == 2) { ?> (action requested) <?php }?></td>
                   <?php } ?>
                 <td>
                   <a href="#" class="btn btn-outline-primary openResetPassword"  data-wid="<?php echo $w['id']?>" data-wname="<?php echo $w['name']?>" title="Reset admin password" data-toggle="modal" data-target="#resetAdmin"><i class="far fa-address-card"></i></a>
@@ -151,7 +151,6 @@ foreach($workspaces as $w) { ?>
 		</div>
 
     <div class="modal fade" id="resetAdmin" tabindex="-1" role="dialog" aria-labelledby="resetAdminLabel" aria-hidden="true">
-      <form action="processmaker.php" method="post">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -165,18 +164,18 @@ foreach($workspaces as $w) { ?>
               <p>If you answer yes, the new settings will be sent by email within 5 minutes.</p>
             </div>
             <div class="modal-footer">
-              <input type="hidden" name="wid" id="wid" value="" />
-              <input type="hidden" name="action" value="resetpw" />
-              <button type="submit" class="btn btn-success" data-dismiss="modal">Yes</button>
-              <a href="#" class="btn btn-danger" data-dismiss="modal">No</a>
+              <form action="processmaker.php" method="post">
+                <input type="hidden" name="wid" id="wid" value="" />
+                <input type="hidden" name="action" value="resetpw" />
+                <button type="submit" class="btn btn-success submitForm">Yes</button>
+                <a href="#" class="btn btn-danger" data-dismiss="modal">No</a>
+              </form>
             </div>
           </div>
         </div>
-      </form>
     </div>
 
     <div class="modal fade" id="deleteWorkspace" tabindex="-1" role="dialog" aria-labelledby="deleteWorkspaceLabel" aria-hidden="true">
-      <form action="processmaker.php" method="post">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header bg-danger">
@@ -189,14 +188,15 @@ foreach($workspaces as $w) { ?>
               <p>Are you sure you want to <strong>delete</strong> workspace '<span class="wname"></span>'?.</p>
             </div>
             <div class="modal-footer">
-              <input type="hidden" name="wid" id="wid" value="" />
-              <input type="hidden" name="action" value="delete" />
-              <button type="submit" class="btn btn-success" data-dismiss="modal">Yes</button>
-              <a href="#" class="btn btn-danger" data-dismiss="modal">No</a>
+              <form action="processmaker.php" method="post">
+                <input type="hidden" name="wid" id="wid" value="" />
+                <input type="hidden" name="action" value="delete" />
+                <button type="submit" class="btn btn-success submitForm">Yes</button>
+                <a href="#" class="btn btn-danger" data-dismiss="modal">No</a>
+              </form>
             </div>
           </div>
         </div>
-      </form>
     </div>
 
 		<script src="js/jquery-3.4.1.min.js"></script>
@@ -217,6 +217,9 @@ foreach($workspaces as $w) { ?>
         $("#deleteWorkspace .wname").text( wName );
       });
 
+      $(document).on("click", ".submitForm", function() {
+        $(this).closest('form:first').submit();
+      });
 
     </script>
 	</body>
