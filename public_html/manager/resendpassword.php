@@ -21,13 +21,14 @@ if (isset($_POST['email'])) {
 		require_once('../../lib/passwordmanager.php');
 
 		createAndSendNewPassword($con, $userid, $username, $_POST['email']);
-		$send = true;
 
 		$stmt->close();
 
 	}
 
 	$con->close();
+
+	$send = true;
 }
 
 
@@ -58,7 +59,7 @@ if (isset($_POST['email'])) {
             If the email address is known to the system, you will receive a new password.
 					  </div>
 <?php } ?>
-					<form action="resendpassword.php">
+					<form action="resendpassword.php" method="post">
 						<div class="form-group">
 							<label for="email">Email address</label>
 							<input type="email" name="email" class="form-control" />
