@@ -45,10 +45,10 @@ $command = $php_cmd . ' ' . $processmaker_cmd . ' workspace-restore' . $workspac
 $output = '';
 $return = 0;
 
-exec( $cmd, $output, $return);
+exec($command, $output, $return);
 
 if ($return != 0) {
-	echo $cmd;
+	echo $command;
 	echo PHP_EOL . PHP_EOL . 'gave output: ' . PHP_EOL . PHP_EOL;
 	echo $output;
 	exit($return);
