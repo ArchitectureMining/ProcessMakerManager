@@ -13,6 +13,7 @@ if (strlen($_SERVER['argv'][1]) > 13) {
 }
 
 require_once(__DIR__.'/../config.php');
+require_once(__DIR__.'/../lib/workspacemanager.php');
 
 
 if (!isset($workspace_template) || !is_file($workspace_template)) {
@@ -28,24 +29,4 @@ if (mysqli_connect_errno()) {
   die('Database error: ' . mysqli_connect_error());
 }
 
-$database = $con->real_escape_string('wf_'.$_SERVER['argv'][1]);
-
-$q = $con->query("SHOW DATABASES LIKE '".$database."'");
-
-if ($q->num_rows > 0) {
-	die('Instance "'.$_SERVER['argv'][1].'" already exists!');
-}
-
-$command = $processmaker_cmd . ' workspace-restore ' . $workspace_template . ' ' . $_SERVER['argv'][1];
-
-$output = '';
-$return = 0;
-
-exec($command, $output, $return);
-
-if ($return != 0) {
-	echo $command;
-	echo PHP_EOL . PHP_EOL . 'gave output: ' . PHP_EOL . PHP_EOL;
-	echo $output;
-	exit($return);
-}
+createWorkspace($con, $_SERVER['argv'][1]);

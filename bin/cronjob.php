@@ -33,11 +33,15 @@ while($act = $q->fetch_object()) {
 
 $q->close();
 
-foreach($action as $a) {
+foreach($actions as $a) {
   $done = false;
 	switch(strtolower($a['command'])) {
 		case 'delete':
 		  break;
+		case 'create':
+		  createWorkspace($con, $a['workspace']);
+		  // Notice, there is no break here,
+		  // as after the create, we need to reset the password!
 		case 'resetpw':
 			$result = resetPasswordAndMail($con, $a['workspace'], $a['user']['name'], $a['user']['email']);
 			if ($result['success']) {
@@ -48,8 +52,6 @@ foreach($action as $a) {
 		  break;
 		case 'restore':
 		  break;
-		case 'create':
-			break;
 		default:
 		  break;
 	}

@@ -8,6 +8,7 @@ if (!isset($_SESSION['user'])) {
 }
 
 require_once('../../config.php');
+require_once('../../lib/utilities.php');
 
 $con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 if (mysqli_connect_errno()) {
@@ -18,18 +19,34 @@ if (mysqli_connect_errno()) {
 if (isset($_POST['action']) && in_array(strtolower($_POST['action']), array('delete', 'resetpw', 'backup','create', 'restore'))) {
   $wid = $_POST['wid'];
 
-  $stmt = $con->prepare('SELECT id, name, status FROM workspace WHERE status < 3 AND user=? AND id= ?');
-  $stmt->bind_param('is', $_SESSION['user'], $wid);
-  $stmt->execute();
-  $stmt->store_result();
+  $continue = false;
+  if (strtolower($_POST['action']) == 'create') {
+    $wid = generateRandomString(8);
+    $insert = $con->prepare('INSERT INTO workspace (`id`, `name`, `user`, `status`) VALUES(?, ?, ?, ?)');
+    $insert->bind_param('ssii', $wid, $_POST['name'], $_SESSION['user'], 0);
+    $insert->execute();
+    $insert->close();
 
-  if ($stmt->num_rows > 0) {
+    $continue = true;
 
-    // set the status to 2
-    $setDel = $con->prepare('UPDATE workspace SET status=2 WHERE id= ?');
-    $setDel->bind_param('s', $wid);
-    $setDel->execute();
-    $setDel->close();
+  } else {
+
+    $stmt = $con->prepare('SELECT id, name, status FROM workspace WHERE status < 3 AND user=? AND id= ?');
+    $stmt->bind_param('is', $_SESSION['user'], $wid);
+    $stmt->execute();
+    $stmt->store_result();
+
+    $continue = ($stmt->num_rows > 0);
+  }
+
+  if ($continue) {
+    if (strtolower($_POST['action']) != 'create') {
+      // set the status to 2
+      $setDel = $con->prepare('UPDATE workspace SET status=2 WHERE id= ?');
+      $setDel->bind_param('s', $wid);
+      $setDel->execute();
+      $setDel->close();
+    }
 
     $action = $con->prepare('INSERT INTO action (type, workspace, params ) VALUES (?, ?, ?)');
 
@@ -42,13 +59,15 @@ if (isset($_POST['action']) && in_array(strtolower($_POST['action']), array('del
     $action->execute();
     $action->close();
 
-    header('Location: processmaker.php');
-    exit;
   } else {
     // Either the wid does not exist any more, the status is already inactive,
     // or it does not belong to the current user!
   }
   $stmt->close();
+
+  // We always go to the new location, to clean up the $_POST.
+  header('Location: processmaker.php');
+  exit;
 }
 
 

@@ -3,7 +3,7 @@
 require_once(__DIR__.'/PHPMailer/PHPMailer.php');
 require_once(__DIR__.'/PHPMailer/Exception.php');
 
-require_once(__DIR__.'/passwordmanager.php');
+require_once(__DIR__.'/utilities.php');
 require_once(__DIR__.'/../config.php');
 
 function workspaceExists($con, $workspace) {
@@ -91,4 +91,20 @@ EOT;
   }
 
   return $result;
+}
+
+
+function createWorkspace($con, $workspace) {
+	if (workspaceExists($con, $workspace)) {
+		return false;
+	}
+
+	global $processmaker_cmd, $workspace_template;
+
+	$command = $processmaker_cmd . ' workspace-restore ' . $workspace_template . ' ' . $_SERVER['argv'][1];
+
+	$output = '';
+	$return = 0;
+
+	exec($command, $output, $return);
 }
