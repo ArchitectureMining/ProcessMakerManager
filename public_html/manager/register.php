@@ -51,42 +51,16 @@ if (isset($_POST['email']) && isset($_POST['team']) && isset($_POST['name']) && 
       $stmt->close();
 
       // 2. Create a random password, and create the user
+      $mailResult = createUserAndSendPassword($con, $_POST['solisid'], $_POST['name'], $_POST['email']);
 
-      $password = generateRandomString(16);
-
-      $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-      $insertUser = $con->prepare('INSERT INTO `user` (`solisid`, `name`, `email`, `password`) VALUES(?, ?, ?, ?);');
-      $insertUser->bind_param('ssss', $_POST['solisid'], $_POST['name'], $_POST['email'], $hashedPassword);
-      $result = $insertUser->execute();
-
-      if ($result) {
-        // get inserted id
-        $userId = $con->insert_id;
-
-        // 3. Connect the user to the right team
-        $insertMember = $con->prepare('INSERT INTO `memberof` (`user`, `team`) VALUES(?, ?);');
-        $insertMember->bind_param('ii', $userId, $teamId);
-        $insertMember->execute();
-        $insertMember->close();
-
-        // 4. Send an email to the user with the password
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-
-        $mailResult = sendPassword($_POST['name'], $_POST['email'], $password);
-
-        if ($mailResult['success']) {
-
-          $success = true;
-
-        } else {
-          $error[] = 'Error while sending message: '.$mailResult['error'];
-        }
-      } else {
-      	$error[] = 'Error while creating user: '.$insertUser->error;
+      if (isset($mailResult['userid'])) {
+        addUserToTeam($con, $mailResult['userid'], $teamId);
       }
-      $insertUser->close();
+
+      // add user to team
+      if (!$mailResult['success']) {
+        $error[] = 'Error while creating user: '.$mailResult['error'];
+      }
     } else {
       $error[] = 'No team found with code: ' . $_POST['team'];
     }

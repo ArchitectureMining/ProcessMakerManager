@@ -5,6 +5,54 @@ require_once(__DIR__.'/utilities.php');
 
 require_once(__DIR__.'/../config.php');
 
+
+function createUser($con, $solisid, $name, $email, $password) {
+  $password = generateRandomString(16);
+
+  $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+  $insertUser = $con->prepare('INSERT INTO `user` (`solisid`, `name`, `email`, `password`) VALUES(?, ?, ?, ?);');
+  $insertUser->bind_param('ssss', $_POST['solisid'], $_POST['name'], $_POST['email'], $hashedPassword);
+  $result = $insertUser->execute();
+
+  $return = array();
+  if ($result) {
+    $userId = $con->insert_id;
+    $return = array('success' => true, 'userid' => $userId);
+  } else {
+    $return = array('success' => false, 'error' => $insertUser->error);
+  }
+  $insertUser->close();
+
+  return $return;
+}
+
+function createUserAndSendPassword($con, $solisid, $name, $email) {
+  $password = generateRandomString(16);
+
+  $result = createUser($con, $solisid, $name, $email, $password);
+  if ($result['success'])
+    $return = sendPassword($name, $email, $password);
+    $return['userid'] = $result['userid'];
+    return $return;
+  } else {
+    return $result;
+  }
+}
+
+function addUserToTeam($con, $user, $team) {
+  $insertMember = $con->prepare('INSERT INTO `memberof` (`user`, `team`) VALUES(?, ?);');
+  $insertMember->bind_param('ii', $user, $team);
+  $insertMember->execute();
+  $insertMember->close();
+}
+
+
+function createAndSendNewPassword($con, $userid) {
+
+}
+
+
 function sendPassword($name, $email, $password) {
   if (empty($name)) {
     return array('success'=>false, 'error' => 'Incorrect name gven');
