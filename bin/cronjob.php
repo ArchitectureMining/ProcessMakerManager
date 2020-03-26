@@ -5,7 +5,7 @@ require_once(__DIR__.'/../config.php');
 require_once(__DIR__.'/../lib/workspacemanager.php');
 require_once(__DIR__.'/../lib/passwordmanager.php');
 
-$con = mysqli_connect($db_host, $db_user, $db_pass);
+$con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 if (mysqli_connect_errno()) {
   die('Database error: ' . mysqli_connect_error());
 }
