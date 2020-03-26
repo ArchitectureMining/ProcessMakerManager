@@ -7,4 +7,8 @@ $db_name = 'pmmanager';
 
 $workspace_template = 'file/to/template.tar';
 
+$processmaker_cmd = '/dir/to/processmaker';
+
+$processmaker_shared = '/dir/to/the/shared/folder';
+
 ?>

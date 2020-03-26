@@ -37,6 +37,8 @@ foreach($actions as $a) {
   $done = false;
 	switch(strtolower($a['command'])) {
 		case 'delete':
+		  removeWorkspace($con, $a['workspace']);
+		  $con->query('UPDATE `workspace` SET `status`=3 WHERE id=`'.$a['workspace'].'`');
 		  $done = true;
 		  break;
 		case 'create':
@@ -55,12 +57,18 @@ foreach($actions as $a) {
 		case 'restore':
 		  break;
 		default:
+			$done = true;
 		  break;
 	}
 
 	if ($done) {
 		// Remove the task from the action table
-		$con->query('UPDATE `workspace` SET `status`=1 WHERE `id` = "'.$a['workspace'].'"');
+		$con->query('UPDATE `workspace` SET `status`=1 WHERE `status` < 3 AND `id` = "'.$a['workspace'].'"');
 		$q = $con->query('DELETE FROM `action` WHERE `id`='.$a['id']);
 	}
 }
+
+$con->query('DELETE FROM `workspace` WHERE `status` > 2;');
+
+$con->close();
+

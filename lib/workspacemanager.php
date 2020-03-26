@@ -108,3 +108,25 @@ function createWorkspace($con, $workspace) {
 
 	exec($command, $output, $return);
 }
+
+function removeWorkspace($con, $workspace) {
+	if (!workspaceExists($con, $workspace)) {
+		return false;
+	}
+
+	global $processmaker_shared;
+
+	$dir = $processmaker_shared.'/'.$workspace;
+
+	if (is_dir($dir)) {
+		// Two things to do: remove the files from the shared folder
+		$command = 'rm -rf '.$dir;
+		exec($command);
+
+		// Remove the database
+		$database = $con->real_escape_string('wf_'.$workspace);
+		$con->query("DROP DATABASE `".$database."`");
+	}
+}
+
+
