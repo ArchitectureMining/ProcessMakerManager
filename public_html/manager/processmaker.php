@@ -42,6 +42,8 @@ if (isset($_POST['action']) && in_array(strtolower($_POST['action']), array('del
     $action->execute();
     $action->close();
 
+    header('Location: processmaker.php');
+    exit;
   } else {
     // Either the wid does not exist any more, the status is already inactive,
     // or it does not belong to the current user!
