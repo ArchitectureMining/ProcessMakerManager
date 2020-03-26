@@ -17,26 +17,28 @@ if (mysqli_connect_errno()) {
 
 // Check the actions
 if (isset($_POST['action']) && in_array(strtolower($_POST['action']), array('delete', 'resetpw', 'backup','create', 'restore'))) {
-  $wid = $_POST['wid'];
+
+  $wid = '';
 
   $continue = false;
   if (strtolower($_POST['action']) == 'create') {
     $wid = generateRandomString(8);
-    $insert = $con->prepare('INSERT INTO workspace (`id`, `name`, `user`, `status`) VALUES(?, ?, ?, ?)');
-    $insert->bind_param('ssii', $wid, $_POST['name'], $_SESSION['user'], 0);
+    $insert = $con->prepare('INSERT INTO workspace (`id`, `name`, `user`) VALUES(?, ?, ?)');
+    $insert->bind_param('ssi', $wid, $_POST['name'], $_SESSION['user']);
     $insert->execute();
     $insert->close();
 
     $continue = true;
 
   } else {
+    $wid = $_POST['wid'];
 
     $stmt = $con->prepare('SELECT id, name, status FROM workspace WHERE status < 3 AND user=? AND id= ?');
     $stmt->bind_param('is', $_SESSION['user'], $wid);
     $stmt->execute();
     $stmt->store_result();
-
     $continue = ($stmt->num_rows > 0);
+    $stmt->close();
   }
 
   if ($continue) {
@@ -63,7 +65,6 @@ if (isset($_POST['action']) && in_array(strtolower($_POST['action']), array('del
     // Either the wid does not exist any more, the status is already inactive,
     // or it does not belong to the current user!
   }
-  $stmt->close();
 
   // We always go to the new location, to clean up the $_POST.
   header('Location: processmaker.php');
