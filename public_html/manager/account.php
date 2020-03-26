@@ -6,6 +6,66 @@ if (!isset($_SESSION['user'])) {
   header('Location: index.php');
   exit;
 }
+
+$con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
+if (mysqli_connect_errno()) {
+  exit('Failed to connect to MySQL: ' . mysqli_connect_error());
+}
+
+$error = array();
+
+if (isset($_POST['solisid']) && isset($_POST['name'])) {
+
+  $valid = true;
+
+  if (strlen(trim($_POST['name'])) < 10) {
+    $error[] = 'The name provided is too short. I expect at least 10 characters';
+    $valid = false;
+  }
+
+  if (strlen(trim($_POST['solisid'])) < 7) {
+    $error[] = 'The SOLISID provided is too short';
+    $valid = false;
+  }
+
+  if ($valid) {
+    $stmt = $con->prepare('UPDATE `user` SET `solisid`=?, `name`=? WHERE id=?');
+    $stmt->bind_param('ssi', $_POST['solisid'], $_POST['name'], $_SESSION['user']);
+    $stmt->execute();
+    $stmt->close();
+
+    $con->close();
+
+    header('Location: account.php');
+    exit;
+  }
+}
+
+
+$stmt = $con->prepare('SELECT id, solisid, name, email, maxworkspaces FROM user WHERE id=?');
+$stmt->bind_param('i', $_SESSION['user']);
+$stmt->execute();
+$stmt->store_result();
+
+$stmt->bind_result($id, $solisid, $name, $email, $maxworkspaces);
+$stmt->fetch();
+$stmt->close();
+
+$teamQ = $con->prepare('SELECT t.name FROM team AS t INNER JOIN memberof AS m ON m.team = t.id WHERE m.user = ? ORDER BY name');
+$teamQ->bind_param('i', $_SESSION['user']);
+$teamQ->execute();
+$teamQ->store_result();
+
+$teams = array();
+
+$teamQ->bind_result($team_name);
+while($teamQ->fetch()) {
+  $teams[] = $team_name;
+}
+$teamQ->close();
+
+$con->close();
+
 ?><!doctype html>
 <html lang="en">
 	<head>
@@ -43,29 +103,40 @@ if (!isset($_SESSION['user'])) {
     	<div class="row">
     		<div class="col-8">
     			<h1>Your account</h1>
+<?php if (isset($error) && is_array($error) && (count($error) > 0)) { ?>
+      <div class="alert alert-danger"><ul>
+<?php foreach($error as $a) { ?>
+        <li><?php echo $a ?></li>
+<?php } ?>
+      </ul></div>
+<?php } ?>
           <form action="#" method="post">
             <div class="form-group row">
               <label for="name" class="col-sm-2 col-form-label">Name</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="name" value="Jan Martijn van der Werf" />
+                <input type="text" class="form-control" id="name" value="<?php echo $name ?>" />
               </div>
             </div>
             <div class="form-group row">
               <label for="solisid" class="col-sm-2 col-form-label">SolisID</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="solisid" value="1234567" />
+                <input type="text" class="form-control" id="solisid" value="<?php echo $solisid ?>" />
               </div>
             </div>
             <div class="form-group row">
               <label for="email" class="col-sm-2 col-form-label">Email</label>
               <div class="col-sm-10">
-                <input type="email" class="form-control-plaintext" id="email" value="j.m.e.m.vanderwerf@uu.nl" />
+                <input type="email" class="form-control-plaintext" id="email" value="<?php echo $email ?>" />
               </div>
             </div>
             <div class="form-group row">
               <label for="memberof" class="col-sm-2 col-form-label">Team</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control-plaintext" id="memberof" value="Informatiesystemen 2019/2020" />
+                <ul class="list-group">
+<?php foreach($teams as $t) { ?>
+                  <li class="list-group-item"><?php echo $t ?></li>
+<?php } ?>
+                </ul>
               </div>
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
