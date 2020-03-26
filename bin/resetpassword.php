@@ -14,29 +14,11 @@ if (strlen($_SERVER['argv'][1]) > 13) {
 
 
 require_once(__DIR__.'/../config.php');
+require_once(__DIR__.'../lib/workspacemanager.php');
 
-$database = 'wf_'.$_SERVER['argv'][1];
-$password = $_SERVER['argv'][2];
-
-$con = mysqli_connect($db_host, $db_user, $db_pass, $database);
+$con = mysqli_connect($db_host, $db_user, $db_pass);
 if (mysqli_connect_errno()) {
-  die('Failed to connect to MySQL: ' . mysqli_connect_error());
+  die('Database error: ' . mysqli_connect_error());
 }
 
-$stmtUsers = $con->prepare("UPDATE USERS SET USR_PASSWORD=md5(?) WHERE USR_UID='00000000000000000000000000000001';");
-$stmtUsers->bind_param('s', $password);
-$result = $stmtUsers->execute();
-if (!$result) {
-	die('Failed updating USERS table: ' . $stmtUsers->error);
-}
-$stmtUsers->close();
-
-$stmtRbac = $con->prepare("UPDATE RBAC_USERS SET USR_PASSWORD=md5(?) WHERE USR_UID='00000000000000000000000000000001';");
-$stmtRbac->bind_param('s', $password);
-$result = $stmtRbac->execute();
-if (!$result) {
-	die('Failed updating RBAC_USERS table: ' . $stmtRbac->error);
-}
-
-$stmtRbac->close();
-$con->close();
+resetPassword($con, $_SERVER['argv'][1], $_SERVER['argv'][2]);

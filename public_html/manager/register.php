@@ -12,7 +12,7 @@ if (isset($_POST['email']) && isset($_POST['team']) && isset($_POST['name']) && 
 
   $con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
   if (mysqli_connect_errno()) {
-    exit('Failed to connect to MySQL: ' . mysqli_connect_error());
+    die('Failed to connect to MySQL: ' . mysqli_connect_error());
   }
 
   // 1. Check if the team exists

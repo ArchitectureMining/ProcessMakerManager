@@ -5,6 +5,6 @@ $db_user = 'processmaker';
 $db_pass = 'password';
 $db_name = 'pmmanager';
 
-
+$workspace_template = 'file/to/template.tar';
 
 ?>
