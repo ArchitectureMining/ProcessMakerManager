@@ -58,19 +58,6 @@ if (isset($_SESSION['user'])) {
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigator" aria-controls="navigator" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navigator">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="processmaker.php">ProcessMaker</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/phpmyadmin" target="_blank">PhpMyAdmin</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="account.php">Account</a>
-          </li>
-        </ul>
-      </div>
     </nav>
     <!-- content -->
     <div class="container">

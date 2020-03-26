@@ -7,8 +7,8 @@ $success = false;
 
 
 if (isset($_POST['email']) && isset($_POST['team']) && isset($_POST['name']) && isset($_POST['solisid'])) {
-  require_once('config.php');
-  require_once('passwordmanager.php');
+  require_once('../../config.php');
+  require_once('../../lib/passwordmanager.php');
 
   $con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
   if (mysqli_connect_errno()) {
@@ -29,7 +29,7 @@ if (isset($_POST['email']) && isset($_POST['team']) && isset($_POST['name']) && 
 
     // 2. Create a random password, and create the user
 
-    $password = generatePassword(16);
+    $password = generateRandomString(16);
 
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 

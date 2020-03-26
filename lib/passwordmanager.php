@@ -1,10 +1,10 @@
 <?php
-require_once('PHPMailer.php');
-require_once('Exception.php');
+require_once('PHPMailer/PHPMailer.php');
+require_once('PHPMailer/Exception.php');
 
-require_once('config.php');
+require_once('../config.php');
 
-function generatePassword(
+function generateRandomString(
     $length = 64,
     $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 ) {
