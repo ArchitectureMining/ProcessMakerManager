@@ -32,6 +32,9 @@ if (!isset($_SESSION['user'])) {
           <li class="nav-item active">
             <a class="nav-link" href="account.php">Account</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="logout.php">Log out</a>
+          </li>
         </ul>
       </div>
     </nav>
