@@ -23,10 +23,6 @@ if (!isset($processmaker_cmd) || !is_file($processmaker_cmd)) {
 	die('Variable $processmaker_cmd does not point to a file in config.php!');
 }
 
-if (!isset($php_cmd) || !is_file($php_cmd)) {
-	die('Variable $php_cmd does not point to a file in config.php!');
-}
-
 $con = mysqli_connect($db_host, $db_user, $db_pass);
 if (mysqli_connect_errno()) {
   die('Database error: ' . mysqli_connect_error());
@@ -40,7 +36,7 @@ if ($q->num_rows > 0) {
 	die('Instance "'.$_SERVER['argv'][1].'" already exists!');
 }
 
-$command = $php_cmd . ' ' . $processmaker_cmd . ' workspace-restore' . $workspace_template . ' ' . $_SERVER['argv'][1];
+$command = $processmaker_cmd . ' workspace-restore ' . $workspace_template . ' ' . $_SERVER['argv'][1];
 
 $output = '';
 $return = 0;
