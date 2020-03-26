@@ -6,7 +6,7 @@ $error = array();
 $errorstring = 'User / password combination is unknown';
 
 if (isset($_POST['login']) && isset($_POST['password'])) {
-  require_once('config.php');
+  require_once('../../config.php');
 
   $con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
   if (mysqli_connect_errno()) {
