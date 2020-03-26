@@ -6,72 +6,93 @@ $success = false;
 
 
 
-if (isset($_POST['email']) && isset($_POST['team']) && isset($_POST['name']) && isset($_POST['solisid'])) {
+if (isset($_POST['email']) && isset($_POST['team']) && isset($_POST['name']) && isset($_POST['solisid']) ) {
   require_once('../../config.php');
   require_once('../../lib/utilities.php');
   require_once('../../lib/passwordmanager.php');
 
-  $con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
-  if (mysqli_connect_errno()) {
-    die('Failed to connect to MySQL: ' . mysqli_connect_error());
+  $valid = true;
+
+  if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+    $error[] = 'Given email address ('.$_POST['email'].') is not valid';
+    $valid = false;
+  }
+  if (!in_array(substr($_POST['email'], -6), array('.uu.nl', '@uu.nl')) ) {
+    $error[] = 'Given email address does not belong to the UU network';
+    $valid = false;
+  }
+  if (strlen(trim($_POST['name'])) < 10) {
+    $error[] = 'The name provided is too short. I expect at least 10 characters';
+    $valid = false;
   }
 
-  // 1. Check if the team exists
-  $stmt = $con->prepare('SELECT id, name FROM team WHERE code=?');
-  $stmt->bind_param('s', $_POST['team']);
-  $stmt->execute();
-  $stmt->store_result();
+  if (strlen(trim($_POST['solisid'])) < 7) {
+    $error[] = 'The SOLISID provided is too short';
+    $valid = false;
+  }
 
-  if ($stmt->num_rows > 0) {
-    // The team exists!
-    $stmt->bind_result($teamId, $teamName);
-    $stmt->fetch();
-    $stmt->close();
+  if ($valid) {
 
-    // 2. Create a random password, and create the user
-
-    $password = generateRandomString(16);
-
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-    $insertUser = $con->prepare('INSERT INTO `user` (`solisid`, `name`, `email`, `password`) VALUES(?, ?, ?, ?);');
-    $insertUser->bind_param('ssss', $_POST['solisid'], $_POST['name'], $_POST['email'], $hashedPassword);
-    $result = $insertUser->execute();
-
-    if ($result) {
-      // get inserted id
-      $userId = $con->insert_id;
-
-      // 3. Connect the user to the right team
-      $insertMember = $con->prepare('INSERT INTO `memberof` (`user`, `team`) VALUES(?, ?);');
-      $insertMember->bind_param('ii', $userId, $teamId);
-      $insertMember->execute();
-      $insertMember->close();
-
-      // 4. Send an email to the user with the password
-      $name = $_POST['name'];
-      $email = $_POST['email'];
-
-      $mailResult = sendPassword($_POST['name'], $_POST['email'], $password);
-
-      if ($mailResult['success']) {
-
-        $success = true;
-
-      } else {
-	echo 'a';
-        $error[] = 'Error while sending message: '.$mailResult['error'];
-      }
-    } else {
-	echo 'b';
-	$error[] = 'Error while creating user: '.$insertUser->error;
+    $con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
+    if (mysqli_connect_errno()) {
+      die('Failed to connect to MySQL: ' . mysqli_connect_error());
     }
-    $insertUser->close();
-  } else {
-    $error[] = 'No team found with code: ' . $_POST['team'];
-  }
 
-  $con->close();
+    // 1. Check if the team exists
+    $stmt = $con->prepare('SELECT id, name FROM team WHERE code=?');
+    $stmt->bind_param('s', $_POST['team']);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows > 0) {
+      // The team exists!
+      $stmt->bind_result($teamId, $teamName);
+      $stmt->fetch();
+      $stmt->close();
+
+      // 2. Create a random password, and create the user
+
+      $password = generateRandomString(16);
+
+      $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+      $insertUser = $con->prepare('INSERT INTO `user` (`solisid`, `name`, `email`, `password`) VALUES(?, ?, ?, ?);');
+      $insertUser->bind_param('ssss', $_POST['solisid'], $_POST['name'], $_POST['email'], $hashedPassword);
+      $result = $insertUser->execute();
+
+      if ($result) {
+        // get inserted id
+        $userId = $con->insert_id;
+
+        // 3. Connect the user to the right team
+        $insertMember = $con->prepare('INSERT INTO `memberof` (`user`, `team`) VALUES(?, ?);');
+        $insertMember->bind_param('ii', $userId, $teamId);
+        $insertMember->execute();
+        $insertMember->close();
+
+        // 4. Send an email to the user with the password
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+
+        $mailResult = sendPassword($_POST['name'], $_POST['email'], $password);
+
+        if ($mailResult['success']) {
+
+          $success = true;
+
+        } else {
+          $error[] = 'Error while sending message: '.$mailResult['error'];
+        }
+      } else {
+      	$error[] = 'Error while creating user: '.$insertUser->error;
+      }
+      $insertUser->close();
+    } else {
+      $error[] = 'No team found with code: ' . $_POST['team'];
+    }
+
+    $con->close();
+  }
 }
 
 
