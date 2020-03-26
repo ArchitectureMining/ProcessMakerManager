@@ -54,7 +54,7 @@ if (isset($_SESSION['user'])) {
 	</head>
 	<body>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <a class="navbar-brand" href="#">ProcessMaker Manager</a>
+      <a class="navbar-brand" href="index.php">ProcessMaker Manager</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigator" aria-controls="navigator" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
