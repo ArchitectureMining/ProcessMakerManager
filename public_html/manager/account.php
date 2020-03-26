@@ -117,13 +117,13 @@ $con->close();
             <div class="form-group row">
               <label for="name" class="col-sm-2 col-form-label">Name</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="name" value="<?php echo $name ?>" />
+                <input type="text" class="form-control" id="name" name="name" value="<?php echo $name ?>" />
               </div>
             </div>
             <div class="form-group row">
               <label for="solisid" class="col-sm-2 col-form-label">SolisID</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="solisid" value="<?php echo $solisid ?>" />
+                <input type="text" class="form-control" id="solisid" name="solisid" value="<?php echo $solisid ?>" />
               </div>
             </div>
             <div class="form-group row">
