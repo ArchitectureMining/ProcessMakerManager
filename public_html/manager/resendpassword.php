@@ -1,4 +1,37 @@
-<!doctype html>
+<?php
+
+if (isset($_POST['email'])) {
+	require_once('../../config.php');
+
+	$con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
+	if (mysqli_connect_errno()) {
+  	exit('Failed to connect to MySQL: ' . mysqli_connect_error());
+	}
+
+	$stmt = $con->prepare('SELECT id, name FROM user WHERE email=?');
+	$stmt->bind_param('s', $_POST['email']);
+	$stmt->execute();
+	$stmt->store_result();
+
+	if ($stmt->num_rows > 0) {
+		// User exists!
+		$stmt->bind_result($userid, $username);
+		$stmt->fetch();
+
+		require_once('../../lib/passwordmanager.php');
+
+		createAndSendNewPassword($con, $userid, $username, $_POST['email']);
+		$send = true;
+
+		$stmt->close();
+
+	}
+
+	$con->close();
+}
+
+
+?><!doctype html>
 <html lang="en">
 	<head>
 		<title>ProcessMaker Manager - Forgot password</title>
@@ -20,13 +53,18 @@
     	<div class="row">
     		<div class="col-8">
     			<h1>Resend password</h1>
-					<form action="resend.php">
+<?php if ($send) { ?>
+						<div class="alert alert-success">
+            If the email address is known to the system, you will receive a new password.
+					  </div>
+<?php } ?>
+					<form action="resendpassword.php">
 						<div class="form-group">
 							<label for="email">Email address</label>
 							<input type="email" name="email" class="form-control" />
 						</div>
 						<button type="submit" class="btn btn-primary">Send new password</button>
-						<a class="d-inline p-2 bg-light" href="login.html">Login</a>
+						<a class="d-inline p-2 bg-light" href="index.php">Login</a>
 					</form>
 				</div>
 				<div class="col-4">

@@ -58,7 +58,9 @@ if (isset($_POST['email']) && isset($_POST['team']) && isset($_POST['name']) && 
       }
 
       // add user to team
-      if (!$mailResult['success']) {
+      if ($mailResult['success']) {
+        $success = true;
+      } else {
         $error[] = 'Error while creating user: '.$mailResult['error'];
       }
     } else {

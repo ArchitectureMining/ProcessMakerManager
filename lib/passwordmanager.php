@@ -48,8 +48,22 @@ function addUserToTeam($con, $user, $team) {
 }
 
 
-function createAndSendNewPassword($con, $userid) {
+function createAndSendNewPassword($con, $userid, $name, $email) {
+  $password = generateRandomString(16);
 
+  $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+  $stmt = $con->prepare('UPDATE user SET password=? WHERE id=?');
+  $stmt->bind_param('si', $hashedPassword, $userid);
+  $result = $stmt->execute();
+  $stmt->close();
+
+  if ($result) {
+    sendPassword($name, $email, $password);
+    return true;
+  } else {
+    return false;
+  }
 }
 
 
