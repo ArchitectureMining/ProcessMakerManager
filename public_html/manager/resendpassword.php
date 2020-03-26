@@ -52,7 +52,7 @@ if (isset($_POST['email'])) {
     <!-- content -->
     <div class="container">
     	<div class="row">
-    		<div class="col-8">
+    		<div class="col-8 py-3">
     			<h1>Resend password</h1>
 <?php if ($send) { ?>
 						<div class="alert alert-success">

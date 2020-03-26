@@ -135,7 +135,7 @@ $con->close();
     <!-- content -->
     <div class="container">
     	<div class="row">
-    		<div class="col-md-11 col-lg-8 col-xl-8">
+    		<div class="col-md-11 col-lg-8 col-xl-8 py-3">
     			<h1>ProcessMaker workspaces</h1>
 			Workspaces: <span class="badge badge-secondary"><?php echo count($workspaces) ?> / <?php echo $maxWorkspaces ?></span>
           <table class="table table-striped table-hover">
@@ -171,9 +171,18 @@ foreach($workspaces as $w) { ?>
 <?php if (count($workspaces) < $maxWorkspaces) { ?>
 	  <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#createWorkspace">Create</a>
 <?php } ?>
-				</div>
+
 			</div>
 		</div>
+    <div class="row py-3">
+      <div class="col-md-11 col-lg-8 col-xl-8">
+        <div class="alert alert-primary">
+          SET THE LOGIN CREDENTIALS FOR PHPMYADMIN HERE
+
+        </div>
+      </div>
+    </div>
+
 
     <div class="modal fade" id="resetAdmin" tabindex="-1" role="dialog" aria-labelledby="resetAdminLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">

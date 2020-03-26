@@ -92,11 +92,11 @@ if (isset($_POST['email']) && isset($_POST['team']) && isset($_POST['name']) && 
     <!-- content -->
     <div class="container">
     	<div class="row">
-		<div class="col-8">
+		<div class="col-8 py-3">
 <?php if ($success) { ?>
           <div class="alert alert-success">
             Registration was successful. You received an e-mail with the login details.
-	  </div>
+	         </div>
 <?php } else { ?>
     			<h1>Register</h1>
 <?php if (isset($error) && is_array($error) && (count($error) > 0)) {

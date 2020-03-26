@@ -104,7 +104,7 @@ $con->close();
     <!-- content -->
     <div class="container">
     	<div class="row">
-    		<div class="col-8">
+    		<div class="col-8 py-3">
     			<h1>Your account</h1>
 <?php if (isset($error) && is_array($error) && (count($error) > 0)) { ?>
       <div class="alert alert-danger"><ul>
