@@ -5,7 +5,7 @@ if ($_SERVER['argc'] < 2) {
 	echo '  workspace id should be at most 13 characters long'.PHP_EOL;
 	echo '  (c) 2020, Jan Martijn van der Werf, Utrecht University'.PHP_EOL;
 
-	exit 1;
+	exit(1);
 }
 
 if (strlen($_SERVER['argv'][1]) > 13) {
