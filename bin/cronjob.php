@@ -13,7 +13,7 @@ if (mysqli_connect_errno()) {
 
 
 
-$q = $con->query('SELECT a.`id`, a.`type`, a.`workspace`, u.`name`, u.`email` FROM `action` AS a, `user` AS u, `workspace` AS w WHERE a.`workspace` = w.`id` AND w.`user` = u.`id` ORDER BY w.`id`;');
+$q = $con->query('SELECT a.`id`, a.`type`, a.`workspace`, a.`params`, u.`name`, u.`email` FROM `action` AS a, `user` AS u, `workspace` AS w WHERE a.`workspace` = w.`id` AND w.`user` = u.`id` ORDER BY w.`id`;');
 
 if (!$q) {
 	die('Error while executing query: ' . $con->error);
