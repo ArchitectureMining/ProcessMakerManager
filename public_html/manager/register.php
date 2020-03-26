@@ -8,6 +8,7 @@ $success = false;
 
 if (isset($_POST['email']) && isset($_POST['team']) && isset($_POST['name']) && isset($_POST['solisid'])) {
   require_once('../../config.php');
+  require_once('../../lib/utilities.php');
   require_once('../../lib/passwordmanager.php');
 
   $con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
