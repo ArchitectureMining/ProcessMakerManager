@@ -12,7 +12,7 @@ if (strlen($_SERVER['argv'][1]) > 13) {
 	die('workspace id is too long. I expected at most 13 characters. Instead I got: '.strlen($_SERVER['argv'][1]).' characters'.PHP_EOL);
 }
 
-require_once(__DIR__'/../config.php');
+require_once(__DIR__.'/../config.php');
 
 
 if (!isset($workspace_template) || !is_file($workspace_template)) {
@@ -27,19 +27,16 @@ if (!isset($php_cmd) || !is_file($php_cmd)) {
 	die('Variable $php_cmd does not point to a file in config.php!');
 }
 
-$database = 'wf_'.$_SERVER['argv'][1];
-
 $con = mysqli_connect($db_host, $db_user, $db_pass);
 if (mysqli_connect_errno()) {
   die('Database error: ' . mysqli_connect_error());
 }
 
-$stmt = $con->prepare('SHOW DATABASES LIKE ?');
-$stmt->bind_param('s', $database);
-$stmt->execute();
-$stmt->store_result();
+$database = $con->real_escape_string('wf_'.$_SERVER['argv'][1]);
 
-if ($stmt->num_rows > 0) {
+$q = $con->query("SHOW DATABASES LIKE '".$database."'");
+
+if ($q->num_rows > 0) {
 	die('Instance "'.$_SERVER['argv'][1].'" already exists!');
 }
 

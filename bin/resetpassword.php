@@ -13,7 +13,7 @@ if (strlen($_SERVER['argv'][1]) > 13) {
 }
 
 
-require_once(__DIR__'/../config.php');
+require_once(__DIR__.'/../config.php');
 
 $database = 'wf_'.$_SERVER['argv'][1];
 $password = $_SERVER['argv'][2];
