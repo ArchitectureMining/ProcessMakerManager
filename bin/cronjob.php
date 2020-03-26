@@ -1,9 +1,9 @@
 #!/usr/bin/php
 <?php
 
-require_once(__DIR__'/../config.php');
-require_once(__DIR__'/../lib/workspacemanager.php');
-require_once(__DIR__'/../lib/passwordmanager.php');
+require_once(__DIR__.'/../config.php');
+require_once(__DIR__.'/../lib/workspacemanager.php');
+require_once(__DIR__.'/../lib/passwordmanager.php');
 
 $con = mysqli_connect($db_host, $db_user, $db_pass);
 if (mysqli_connect_errno()) {
@@ -14,6 +14,10 @@ if (mysqli_connect_errno()) {
 
 
 $q = $con->query('SELECT a.`id`, a.`type`, a.`workspace`, u.`name`, u.`email` FROM `action` AS a, `user` AS u, `workspace` AS w WHERE a.`workspace` = w.`id` AND w.`user` = u.`id` ORDER BY w.`id`;');
+
+if (!$q) {
+	die('Error while executing query: ' . $con->error);
+}
 
 $actions = array();
 
@@ -52,7 +56,7 @@ foreach($action as $a) {
 
 	if ($done) {
 		// Remove the task from the action table
-		$con->query('UPDATE `workspace` SET `status`=1 WHERE `id` = "'.$a['workspace'].'"';)
+		$con->query('UPDATE `workspace` SET `status`=1 WHERE `id` = "'.$a['workspace'].'"');
 		$q = $con->query('REMOVE FROM `action` WHERE `id`='.$a['id']);
 	}
 }
