@@ -38,7 +38,7 @@ foreach($actions as $a) {
 	switch(strtolower($a['command'])) {
 		case 'delete':
 		  removeWorkspace($con, $a['workspace']);
-		  $con->query('UPDATE `workspace` SET `status`=3 WHERE id=`'.$a['workspace'].'`');
+		  $con->query('UPDATE `workspace` SET `status`=3 WHERE `id`="'.$a['workspace'].'"');
 		  $done = true;
 		  break;
 		case 'create':
