@@ -31,7 +31,7 @@ function createUserAndSendPassword($con, $solisid, $name, $email) {
   $password = generateRandomString(16);
 
   $result = createUser($con, $solisid, $name, $email, $password);
-  if ($result['success'])
+  if ($result['success']) {
     $return = sendPassword($name, $email, $password);
     $return['userid'] = $result['userid'];
     return $return;
