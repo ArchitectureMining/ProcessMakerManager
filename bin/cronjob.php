@@ -37,6 +37,7 @@ foreach($actions as $a) {
   $done = false;
 	switch(strtolower($a['command'])) {
 		case 'delete':
+		  $done = true;
 		  break;
 		case 'create':
 		  createWorkspace($con, $a['workspace']);
@@ -44,6 +45,7 @@ foreach($actions as $a) {
 		  // as after the create, we need to reset the password!
 		case 'resetpw':
 			$result = resetPasswordAndMail($con, $a['workspace'], $a['user']['name'], $a['user']['email']);
+
 			if ($result['success']) {
 				$done = true;
 			}
@@ -59,6 +61,6 @@ foreach($actions as $a) {
 	if ($done) {
 		// Remove the task from the action table
 		$con->query('UPDATE `workspace` SET `status`=1 WHERE `id` = "'.$a['workspace'].'"');
-		$q = $con->query('REMOVE FROM `action` WHERE `id`='.$a['id']);
+		$q = $con->query('DELETE FROM `action` WHERE `id`='.$a['id']);
 	}
 }
