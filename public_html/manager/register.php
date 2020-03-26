@@ -137,19 +137,19 @@ if (isset($_POST['email']) && isset($_POST['team']) && isset($_POST['name']) && 
     			<form action="register.php" method="post">
 						<div class="form-group">
               <label for="solisid">SolisID</label>
-              <input type="text" maxlength="8" name="solisid" class="form-control" />
+              <input type="text" maxlength="8" name="solisid" class="form-control" value="<?php echo $_POST['solisid'] ?? ''; ?>" />
             </div>
             <div class="form-group">
               <label for="name">Name</label>
-              <input type="text" name="name" class="form-control" />
+              <input type="text" name="name" class="form-control" value="<?php echo $_POST['name'] ?? ''; ?>" />
             </div>
 						<div class="form-group">
               <label for="email">Email address</label>
-              <input type="email" name="email" class="form-control" />
+              <input type="email" name="email" class="form-control" value="<?php echo $_POST['email'] ?? ''; ?>" />
             </div>
             <div class="form-group">
 							<label for="team">Team code</label>
-							<input type="text" maxlength="8" name="team" class="form-control" />
+							<input type="text" maxlength="8" name="team" class="form-control" value="<?php echo $_POST['team'] ?? ''; ?>" />
 						</div>
 						<button type="submit" class="btn btn-primary">Register</button>
 						<a class="d-inline p-2 bg-light" href="index.php">Login</a>
