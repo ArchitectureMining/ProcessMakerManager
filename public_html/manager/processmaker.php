@@ -165,16 +165,16 @@ foreach($workspaces as $w) { ?>
             </tbody>
 	  </table>
 <?php if (count($workspaces) < $maxWorkspaces) { ?>
-	  <a href="#" class="btn btn-primary">Create</a>
+	  <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#createWorkspace">Create</a>
 <?php } ?>
 				</div>
 			</div>
 		</div>
 
     <div class="modal fade" id="resetAdmin" tabindex="-1" role="dialog" aria-labelledby="resetAdminLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-secondary">
               <h5 class="modal-title" id="resetAdminLabel">Reset password for '<span class="wname"></span>'</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -197,7 +197,7 @@ foreach($workspaces as $w) { ?>
     </div>
 
     <div class="modal fade" id="deleteWorkspace" tabindex="-1" role="dialog" aria-labelledby="deleteWorkspaceLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header bg-danger">
               <h5 class="modal-title" id="deleteWorkspaceLabel">Delete '<span class="wname"></span>'</h5>
@@ -216,6 +216,34 @@ foreach($workspaces as $w) { ?>
                 <a href="#" class="btn btn-danger" data-dismiss="modal">No</a>
               </form>
             </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="createWorkspace" tabindex="-1" role="dialog" aria-labelledby="createWorkspaceLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <form action="processmaker.php" method="post">
+              <div class="modal-header bg-secondary">
+                <h5 class="modal-title" id="createWorkspaceLabel">New workspace</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body container">
+                <div class="form-group row">
+                  <label for="newname" class="col-sm-2 col-form-label">Name:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="newname" />
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <input type="hidden" name="action" value="delete" />
+                <button type="submit" class="btn btn-success submitForm">Create</button>
+                <a href="#" class="btn btn-secondary" data-dismiss="modal">Cancel</a>
+              </div>
+            </form>
           </div>
         </div>
     </div>
