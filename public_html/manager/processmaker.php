@@ -233,14 +233,14 @@ foreach($workspaces as $w) { ?>
               </div>
               <div class="modal-body container">
                 <div class="form-group row">
-                  <label for="newname" class="col-sm-2 col-form-label">Name:</label>
+                  <label for="name" class="col-sm-2 col-form-label">Name:</label>
                   <div class="col-sm-10">
-                    <input type="text" class="form-control" id="newname" />
+                    <input type="text" class="form-control" id="name" name="name"/>
                   </div>
                 </div>
               </div>
               <div class="modal-footer">
-                <input type="hidden" name="action" value="delete" />
+                <input type="hidden" name="action" value="create" />
                 <button type="submit" class="btn btn-success submitForm">Create</button>
                 <a href="#" class="btn btn-secondary" data-dismiss="modal">Cancel</a>
               </div>

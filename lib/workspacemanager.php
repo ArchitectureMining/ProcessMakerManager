@@ -101,7 +101,7 @@ function createWorkspace($con, $workspace) {
 
 	global $processmaker_cmd, $workspace_template;
 
-	$command = $processmaker_cmd . ' workspace-restore ' . $workspace_template . ' ' . $_SERVER['argv'][1];
+	$command = $processmaker_cmd . ' workspace-restore ' . $workspace_template . ' ' . $workspace;
 
 	$output = '';
 	$return = 0;
