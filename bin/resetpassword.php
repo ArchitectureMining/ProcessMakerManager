@@ -14,7 +14,7 @@ if (strlen($_SERVER['argv'][1]) > 13) {
 
 
 require_once(__DIR__.'/../config.php');
-require_once(__DIR__.'../lib/workspacemanager.php');
+require_once(__DIR__.'/../lib/workspacemanager.php');
 
 $con = mysqli_connect($db_host, $db_user, $db_pass);
 if (mysqli_connect_errno()) {
