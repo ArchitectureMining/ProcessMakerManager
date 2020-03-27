@@ -1,2 +1,6 @@
 config.php
 template/
+node_modules/
+public_html/manager/css/
+public_html/manager/js/
+yarn-error.log

@@ -82,8 +82,7 @@ $con->close();
 		<title>ProcessMaker Manager - Login</title>
 		<meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-		<link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/all.css" />
+    <link rel="stylesheet" href="css/app.css">
 	</head>
 	<body>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -178,7 +177,6 @@ $con->close();
       </div>
 		</div>
 
-		<script src="js/jquery-3.4.1.min.js"></script>
-    <script src="js/popper-1.16.0.min.js"></script>
+    <script src="js/app.js"></script>
 	</body>
 </html>
