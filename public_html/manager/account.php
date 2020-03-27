@@ -32,7 +32,7 @@ if (isset($_POST['solisid']) && isset($_POST['name'])) {
   }
 
   if ($valid) {
-    function updateUser($con, $_SESSION['user'], $_POST['solisid'], $_POST['name']);
+    updateUser($con, $_SESSION['user'], $_POST['solisid'], $_POST['name']);
 
     $con->close();
     header('Location: account.php');
