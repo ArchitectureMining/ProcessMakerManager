@@ -64,7 +64,6 @@ function createAndSendNewPassword($con, $userid, $name, $email) {
   }
 }
 
-$_POST['solisid'], $_POST['name'], $_SESSION['user']
 function updateUser($con, $userid, $solisid, $name) {
     $stmt = $con->prepare('UPDATE `user` SET `solisid`=?, `name`=? WHERE id=?');
     $stmt->bind_param('ssi', $solisid, $name, $userid);
