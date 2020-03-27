@@ -15,9 +15,9 @@ function updateMysqlUser($con, $username, $password) {
 	$user = $con->real_escape_string($username);
 	$pass = $con->real_escape_string($password);
 
-	$query = "ALTER USER IF EXISTS '".$user."'@'localhost' IDENTIFIED BY '".$pass."';"
+	$query = "ALTER USER '".$user."'@'localhost' IDENTIFIED BY '".$pass."';";
 
-	$con->query($query) or die("Error in query ($query): ". $con->error);
+	$con->query($query);
 }
 
 function addMysqlDatabasePermission($con, $username, $database) {
