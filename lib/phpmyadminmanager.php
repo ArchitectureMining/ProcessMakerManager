@@ -22,5 +22,5 @@ function addMysqlDatabasePermission($con, $username, $database) {
 	$user = $con->real_escape_string($username);
 	$db   = $con->real_escape_string($database);
 
-	$con->query("GRANT ALL PRIVILEGES ON `".$db."`.* TO '".$user."'@'localhost'";);
+	$con->query("GRANT ALL PRIVILEGES ON `".$db."`.* TO '".$user."'@'localhost';");
 }
