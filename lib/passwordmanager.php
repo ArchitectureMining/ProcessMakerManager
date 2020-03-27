@@ -2,21 +2,28 @@
 require_once(__DIR__.'/PHPMailer/PHPMailer.php');
 require_once(__DIR__.'/PHPMailer/Exception.php');
 require_once(__DIR__.'/utilities.php');
+require_once(__DIR__.'/phpmyadminmanager.php');
 
 require_once(__DIR__.'/../config.php');
 
 
 function createUser($con, $solisid, $name, $email, $password) {
+
+  $mysqlUser = generateRandomString(13);
+
   $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-  $insertUser = $con->prepare('INSERT INTO `user` (`solisid`, `name`, `email`, `password`) VALUES(?, ?, ?, ?);');
-  $insertUser->bind_param('ssss', $_POST['solisid'], $_POST['name'], $_POST['email'], $hashedPassword);
+  $insertUser = $con->prepare('INSERT INTO `user` (`solisid`, `name`, `email`, `password`, `sqlusername`) VALUES(?, ?, ?, ?, ?);');
+  $insertUser->bind_param('ssss', $_POST['solisid'], $_POST['name'], $_POST['email'], $hashedPassword, $mysqlUser);
   $result = $insertUser->execute();
 
   $return = array();
   if ($result) {
     $userId = $con->insert_id;
     $return = array('success' => true, 'userid' => $userId);
+
+    createMysqlUser($con, $mysqlUser, $password);
+
   } else {
     $return = array('success' => false, 'error' => $insertUser->error);
   }
@@ -29,6 +36,7 @@ function createUserAndSendPassword($con, $solisid, $name, $email) {
   $password = generateRandomString(16);
 
   $result = createUser($con, $solisid, $name, $email, $password);
+
   if ($result['success']) {
     $return = sendPassword($name, $email, $password);
     $return['userid'] = $result['userid'];
@@ -78,6 +86,8 @@ function updatePassword($con, $userid, $password) {
   $stmt->bind_param('si', $hashedPassword, $userid);
   $stmt->execute();
   $stmt->close();
+
+  updateMysqlUser($con, $userid, $password);
 }
 
 

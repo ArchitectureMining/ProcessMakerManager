@@ -3,7 +3,9 @@
 require_once(__DIR__.'/PHPMailer/PHPMailer.php');
 require_once(__DIR__.'/PHPMailer/Exception.php');
 
+require_once(__DIR__.'/phpmyadminmanager.php');
 require_once(__DIR__.'/utilities.php');
+
 require_once(__DIR__.'/../config.php');
 
 function workspaceExists($con, $workspace) {
@@ -107,6 +109,9 @@ function createWorkspace($con, $workspace) {
 	$return = 0;
 
 	exec($command, $output, $return);
+
+	// Couple the database to the right user
+	addMysqlDatabasePermission($con, $username, 'wf_'.$workspace);
 }
 
 function removeWorkspace($con, $workspace) {

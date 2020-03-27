@@ -13,7 +13,7 @@ if (mysqli_connect_errno()) {
 
 
 
-$q = $con->query('SELECT a.`id`, a.`type`, a.`workspace`, a.`params`, u.`name`, u.`email` FROM `action` AS a, `user` AS u, `workspace` AS w WHERE a.`workspace` = w.`id` AND w.`user` = u.`id` ORDER BY w.`id`;');
+$q = $con->query('SELECT a.`id`, a.`type`, a.`workspace`, a.`params`, u.`name`, u.`email`, u.`sqlusername` FROM `action` AS a, `user` AS u, `workspace` AS w WHERE a.`workspace` = w.`id` AND w.`user` = u.`id` ORDER BY w.`id`;');
 
 if (!$q) {
 	die('Error while executing query: ' . $con->error);
@@ -27,7 +27,12 @@ while($act = $q->fetch_object()) {
 		'command'   => $act->type,
 		'workspace' => $act->workspace,
 		'params'    => $act->params,
-		'user'  => array('name' => $act->name, 'email' => $act->email)
+		'user'      =>
+		    array(
+				  'name'    => $act->name,
+				  'email'   => $act->email,
+				  'sqluser' => $act->sqlusername
+				),
 	);
 }
 
@@ -42,7 +47,7 @@ foreach($actions as $a) {
 		  $done = true;
 		  break;
 		case 'create':
-		  createWorkspace($con, $a['workspace']);
+		  createWorkspace($con, $a['workspace'], $a['user']['sqlusername']);
 		  // Notice, there is no break here,
 		  // as after the create, we need to reset the password!
 		case 'resetpw':
