@@ -79,7 +79,7 @@ function updateUser($con, $userid, $solisid, $name) {
     $stmt->close();
 }
 
-function updatePassword($con, $userid, $password) {
+function updatePassword($con, $userid, $password, $sqlusername = '') {
   $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
   $stmt = $con->prepare('UPDATE `user` SET `password`=? WHERE `id`=?');
@@ -87,7 +87,9 @@ function updatePassword($con, $userid, $password) {
   $stmt->execute();
   $stmt->close();
 
-  updateMysqlUser($con, $userid, $password);
+  if (!empty(sqlusername)) {
+    updateMysqlUser($con, $sqlusername, $password);
+  }
 }
 
 

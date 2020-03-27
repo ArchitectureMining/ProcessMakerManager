@@ -43,7 +43,7 @@ if (isset($_POST['solisid']) && isset($_POST['name'])) {
 if (isset($_POST['password']) && isset($_POST['retypePassword'])) {
 
   if ($_POST['password'] == $_POST['retypePassword']) {
-    updatePassword($con, $_SESSION['user'], $_POST['password']);
+    updatePassword($con, $_SESSION['user'], $_POST['password'], $_SESSION['sqlusername']);
   }
 
   $con->close();

@@ -15,18 +15,19 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
 
   $email = $_POST['login'];
 
-  $stmt = $con->prepare('SELECT id, name, password FROM user WHERE email LIKE ?');
+  $stmt = $con->prepare('SELECT id, name, password, sqlusername FROM user WHERE email LIKE ?');
   $stmt->bind_param('s', $email);
   $result = $stmt->execute();
   $stmt->store_result();
 
   if ($stmt->num_rows > 0) {
-    $stmt->bind_result($id, $name, $password);
+    $stmt->bind_result($id, $name, $password, $sqlusername);
     $stmt->fetch();
     if (password_verify($_POST['password'], $password)) {
       session_regenerate_id();
       $_SESSION['user'] = $id;
       $_SESSION['name'] = $name;
+      $_SESSION['sqlusername'] = $sqlusername;
 
     } else {
         $error[] = $errorstring;
