@@ -7,8 +7,6 @@ require_once(__DIR__.'/../config.php');
 
 
 function createUser($con, $solisid, $name, $email, $password) {
-  $password = generateRandomString(16);
-
   $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
   $insertUser = $con->prepare('INSERT INTO `user` (`solisid`, `name`, `email`, `password`) VALUES(?, ?, ?, ?);');
