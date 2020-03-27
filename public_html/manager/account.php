@@ -8,7 +8,7 @@ if (!isset($_SESSION['user'])) {
 }
 
 require_once('../../config.php');
-
+require_once('../../lib/passwordmanager.php');
 
 $con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 if (mysqli_connect_errno()) {
@@ -32,16 +32,23 @@ if (isset($_POST['solisid']) && isset($_POST['name'])) {
   }
 
   if ($valid) {
-    $stmt = $con->prepare('UPDATE `user` SET `solisid`=?, `name`=? WHERE id=?');
-    $stmt->bind_param('ssi', $_POST['solisid'], $_POST['name'], $_SESSION['user']);
-    $stmt->execute();
-    $stmt->close();
+    function updateUser($con, $_SESSION['user'], $_POST['solisid'], $_POST['name']);
 
     $con->close();
-
     header('Location: account.php');
     exit;
   }
+}
+
+if (isset($_POST['password']) && isset($_POST['retypePassword'])) {
+
+  if ($_POST['password'] == $_POST['retypePassword']) {
+    updatePassword($con, $_SESSION['user'], $_POST['password']);
+  }
+
+  $con->close();
+  header('Location: account.php');
+  exit;
 }
 
 
@@ -146,10 +153,32 @@ $con->close();
           </form>
 				</div>
 			</div>
+      <div class="col-8 py-3">
+        <div class="card">
+          <form action="account.php" method="post">
+            <div class="card-header">
+              Change password
+            </div>
+            <div class="card-body">
+              <div class="form-group row">
+                <label for="password" class="col-sm-3 col-form-label">Password</label>
+                <div class="col-sm-9">
+                  <input type="password" class="form-control" id="password" name="password" value=""/>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="retypePassword" class="col-sm-3 col-form-label">Retype password</label>
+                <div class="col-sm-9">
+                  <input type="password" class="form-control" id="retypePassword" name="retypePassword" value=""/>
+                </div>
+              </div>
+              <button type="submit" name="change" class="btn btn-primary disabled">Change</button>
+            </div>
+          </form>
+      </div>
 		</div>
 
 		<script src="js/jquery-3.4.1.min.js"></script>
     <script src="js/popper-1.16.0.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
 	</body>
 </html>

@@ -66,6 +66,23 @@ function createAndSendNewPassword($con, $userid, $name, $email) {
   }
 }
 
+$_POST['solisid'], $_POST['name'], $_SESSION['user']
+function updateUser($con, $userid, $solisid, $name) {
+    $stmt = $con->prepare('UPDATE `user` SET `solisid`=?, `name`=? WHERE id=?');
+    $stmt->bind_param('ssi', $solisid, $name, $userid);
+    $stmt->execute();
+    $stmt->close();
+}
+
+function updatePassword($con, $userid, $password) {
+  $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+  $stmt = $con->prepare('UPDATE `user` SET `password`=? WHERE `id`=?');
+  $stmt->bind_param('si', $hashedPassword, $userid);
+  $stmt->execute();
+  $stmt->close();
+}
+
 
 function sendPassword($name, $email, $password) {
   if (empty($name)) {
