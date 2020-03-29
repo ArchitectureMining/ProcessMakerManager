@@ -96,7 +96,7 @@ EOT;
 }
 
 
-function createWorkspace($con, $workspace) {
+function createWorkspace($con, $workspace, $username) {
 	if (workspaceExists($con, $workspace)) {
 		return false;
 	}

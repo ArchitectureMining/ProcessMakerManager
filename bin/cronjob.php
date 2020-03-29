@@ -47,7 +47,7 @@ foreach($actions as $a) {
 		  $done = true;
 		  break;
 		case 'create':
-		  createWorkspace($con, $a['workspace'], $a['user']['sqlusername']);
+		  createWorkspace($con, $a['workspace'], $a['user']['sqluser']);
 		  // Notice, there is no break here,
 		  // as after the create, we need to reset the password!
 		case 'resetpw':
