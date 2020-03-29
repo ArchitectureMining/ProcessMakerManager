@@ -119,7 +119,12 @@ $con->close();
 <?php } ?>
       </ul></div>
 <?php } ?>
-          <form action="#" method="post">
+          <form action="account.php" method="post" id="form">
+            <form-group class="form-group" :validator="$v.solidId" :messages="messages.solidId" label="SolisID">
+              <template slot-scope="{ validator, hasErrors }">
+                <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="text" name="solisid" v-model.trim.lazy="$v.solidId.$model" required minlength="6" maxlength="8" value="<?php echo $solisid ?>" />
+              </template>
+            </form-group>
             <div class="form-group row">
               <label for="name" class="col-sm-2 col-form-label">Name</label>
               <div class="col-sm-10">
@@ -129,7 +134,7 @@ $con->close();
             <div class="form-group row">
               <label for="solisid" class="col-sm-2 col-form-label">SolisID</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="solisid" name="solisid" value="<?php echo $solisid ?>" />
+                <input type="text" :validator="$v.solidId" :messages="messages.solidId" label="SolisID" class="form-control" id="solisid" name="solisid" value="<?php echo $solisid ?>" />
               </div>
             </div>
             <div class="form-group row">
