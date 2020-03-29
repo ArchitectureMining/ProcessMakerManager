@@ -122,12 +122,12 @@ $con->close();
           <form action="account.php" method="post" id="form">
             <form-group class="form-group" :validator="$v.solidId" :messages="messages.solidId" label="SolisID">
               <template slot-scope="{ validator, hasErrors }">
-                <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="text" name="solisid" v-model.trim.lazy="$v.solidId.$model" required minlength="6" maxlength="8" value="<?php echo $solisid ?>" />
+                <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="text" name="solisid" v-model.trim.lazy="$v.solidId.$model" required minlength="6" maxlength="8" />
               </template>
             </form-group>
             <form-group class="form-group" :validator="$v.name" :messages="messages.name" label="Name">
               <template slot-scope="{ validator, hasErrors }">
-                <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="text" name="name" v-model.trim.lazy="$v.name.$model" required value="<?php echo $name ?>" />
+                <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="text" name="name" v-model.trim.lazy="$v.name.$model" required />
               </template>
             </form-group>
             <div class="form-group row">
@@ -189,8 +189,8 @@ $con->close();
 
           data: function () {
             return {
-              solidId: '<?php echo $_POST['solisid'] ?? ''; ?>',
-              name: '<?php echo $_POST['name'] ?? ''; ?>',
+              solidId: '<?php echo $$solisid ?? ''; ?>',
+              name: '<?php echo $name ?? ''; ?>',
 
               messages: {
                 solidId: {
