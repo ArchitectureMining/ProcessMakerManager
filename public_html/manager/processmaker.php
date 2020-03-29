@@ -142,7 +142,8 @@ $con->close();
               <tr>
                 <th>#</th>
                 <th>Workspace</th>
-                <th></th>
+                <th>Database</th>
+                <th>Actions</th>
               </tr>
             </thead>
 	    <tbody>
@@ -155,8 +156,14 @@ foreach($workspaces as $w) { ?>
                   <?php echo $w['name'] . ' (being created)'; ?>
                 </td>
                 <td></td>
+                <td></td>
 <?php } else { ?>
-                  <td><a href="https://pais.science.uu.nl/sys<?php echo $w['id']?>/en/neoclassic/login/login" target="_blank"><?php echo $w['name'] ?></a> <?php if ($w['status'] == 2) { ?> (action requested) <?php }?></td>
+                <td>
+                  <a href="https://pais.science.uu.nl/sys<?php echo $w['id']?>/en/neoclassic/login/login" target="_blank"><?php echo $w['name'] ?></a> <?php if ($w['status'] == 2) { ?> (action requested) <?php }?>
+                </td>
+                <td>
+                  <pre>wf_<?php echo $w['id'] ?></pre>
+                </td>
                 <td>
 		                <a href="#" class="btn btn-outline-primary openResetPassword"  data-wid="<?php echo $w['id']?>" data-wname="<?php echo $w['name']?>" title="Reset admin password" data-toggle="modal" data-target="#resetAdmin">
                       <svg class="bi bi-person" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
