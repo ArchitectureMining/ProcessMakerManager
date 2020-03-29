@@ -59,12 +59,13 @@ if (isset($_POST['email'])) {
             If the email address is known to the system, you will receive a new password.
 					  </div>
 <?php } ?>
-					<form action="resendpassword.php" method="post">
-						<div class="form-group">
-							<label for="email">Email address</label>
-							<input type="email" name="email" class="form-control" />
-						</div>
-						<button type="submit" class="btn btn-primary">Send new password</button>
+					<form action="resendpassword.php" method="post" id="form">
+			            <form-group class="form-group" :validator="$v.email" :messages="messages.email" label="Email address">
+			              <template slot-scope="{ validator, hasErrors }">
+			                <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="email" name="email" v-model.trim.lazy="$v.email.$model" required />
+			              </template>
+			            </form-group>
+						<button class="btn btn-primary" @click.prevent="submit">Send new password</button>
 						<a class="d-inline p-2 bg-light" href="index.php">Login</a>
 					</form>
 				</div>
@@ -74,5 +75,41 @@ if (isset($_POST['email'])) {
 		</div>
 
     	<script src="js/app.js"></script>
+	    <script>
+	      (function () {
+	        new Vue({
+	          el: '#form',
+
+	          data: function () {
+	            return {
+	              email: '<?php echo $_POST['email'] ?? ''; ?>',
+
+	              messages: { 
+	                email: {
+	                  required: 'You forgot to provide your email address.',
+	                  email: 'This does\'t look like a valid email address.',
+	                },
+	              }
+	            }
+	          },
+
+	          validations: {
+	            email: {
+	              required: validators.required,
+	              email: validators.email,
+	            },
+	          },
+
+	          methods: {
+	            submit: function () {
+	              this.$v.$touch()
+	              if (! this.$v.$invalid) {
+	                this.$el.submit();
+	              }
+	            },
+	          }
+	        })
+	      })();
+	    </script>
 	</body>
 </html>

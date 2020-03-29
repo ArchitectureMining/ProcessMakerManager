@@ -74,16 +74,18 @@ if (isset($_SESSION['user'])) {
 <?php } ?>
 			</ul></div>
 <?php } ?>
-					<form action="index.php" method="post">
-						<div class="form-group">
-							<label for="login">Email address</label>
-							<input type="email" name="login" class="form-control" />
-						</div>
-						<div class="form-group">
-							<label for="password">Password</label>
-							<input type="password" name="password" class="form-control" />
-						</div>
-						<button type="submit" class="btn btn-primary">Log in</button>
+					<form action="index.php" method="post" id="form">
+            <form-group class="form-group" :validator="$v.email" :messages="messages.email" label="Email address">
+              <template slot-scope="{ validator, hasErrors }">
+                <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="email" name="email" v-model.trim.lazy="$v.email.$model" required />
+              </template>
+            </form-group>
+            <form-group class="form-group" :validator="$v.password" :messages="messages.password" label="Password">
+              <template slot-scope="{ validator, hasErrors }">
+                <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="password" name="password" v-model.trim.lazy="$v.password.$model" required />
+              </template>
+            </form-group>
+						<button class="btn btn-primary" @click.prevent="submit">Log in</button>
 						<a class="d-inline p-2 bg-light" href="resendpassword.php">Forgot password?</a>
 						<a class="d-inline p-2 bg-light" href="register.php">Register</a>
 					</form>
@@ -94,5 +96,48 @@ if (isset($_SESSION['user'])) {
 		</div>
 
     <script src="js/app.js"></script>
+    <script>
+      (function () {
+        new Vue({
+          el: '#form',
+
+          data: function () {
+            return {
+              email: '<?php echo $_POST['email'] ?? ''; ?>',
+              password: '<?php echo $_POST['password'] ?? ''; ?>',
+
+              messages: { 
+                email: {
+                  required: 'You forgot to provide your email address.',
+                  email: 'This does\'t look like a valid email address.',
+                },
+                password: {
+                  required: 'You forgot to provide your password.',
+                }
+              }
+            }
+          },
+
+          validations: {
+            email: {
+              required: validators.required,
+              email: validators.email,
+            },
+            password: {
+              required: validators.required,
+            },
+          },
+
+          methods: {
+            submit: function () {
+              this.$v.$touch()
+              if (! this.$v.$invalid) {
+                this.$el.submit();
+              }
+            },
+          }
+        })
+      })();
+    </script>
 	</body>
 </html>

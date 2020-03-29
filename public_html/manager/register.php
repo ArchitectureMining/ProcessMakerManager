@@ -110,24 +110,28 @@ if (isset($_POST['email']) && isset($_POST['team']) && isset($_POST['name']) && 
 <?php
   }
 ?>
-    			<form action="register.php" method="post">
-						<div class="form-group">
-              <label for="solisid">SolisID</label>
-              <input type="text" maxlength="8" name="solisid" class="form-control" value="<?php echo $_POST['solisid'] ?? ''; ?>" />
-            </div>
-            <div class="form-group">
-              <label for="name">Name</label>
-              <input type="text" name="name" class="form-control" value="<?php echo $_POST['name'] ?? ''; ?>" />
-            </div>
-						<div class="form-group">
-              <label for="email">Email address</label>
-              <input type="email" name="email" class="form-control" value="<?php echo $_POST['email'] ?? ''; ?>" />
-            </div>
-            <div class="form-group">
-							<label for="team">Team code</label>
-							<input type="text" maxlength="8" name="team" class="form-control" value="<?php echo $_POST['team'] ?? ''; ?>" />
-						</div>
-						<button type="submit" class="btn btn-primary">Register</button>
+    			<form action="register.php" method="post" id="form">
+            <form-group class="form-group" :validator="$v.solidId" :messages="messages.solidId" label="SolisID">
+              <template slot-scope="{ validator, hasErrors }">
+                <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="text" name="solisid" v-model.trim.lazy="$v.solidId.$model" required minlength="8" maxlength="8" />
+              </template>
+            </form-group>
+            <form-group class="form-group" :validator="$v.name" :messages="messages.name" label="Name">
+              <template slot-scope="{ validator, hasErrors }">
+                <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="text" name="name" v-model.trim.lazy="$v.name.$model" required />
+              </template>
+            </form-group>
+            <form-group class="form-group" :validator="$v.email" :messages="messages.email" label="Email address">
+              <template slot-scope="{ validator, hasErrors }">
+                <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="email" name="email" v-model.trim.lazy="$v.email.$model" required />
+              </template>
+            </form-group>
+            <form-group class="form-group" :validator="$v.team" :messages="messages.team" label="Team code">
+              <template slot-scope="{ validator, hasErrors }">
+                <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="text" name="team" v-model.trim.lazy="$v.team.$model" required />
+              </template>
+            </form-group>
+						<button class="btn btn-primary" @click.prevent="submit">Register</button>
 						<a class="d-inline p-2 bg-light" href="index.php">Login</a>
 					</form>
 				</div>
@@ -138,5 +142,72 @@ if (isset($_POST['email']) && isset($_POST['team']) && isset($_POST['name']) && 
 		</div>
 
     <script src="js/app.js"></script>
+    <script>
+      (function () {
+        new Vue({
+          el: '#form',
+
+          data: function () {
+            return {
+              solidId: '<?php echo $_POST['solisid'] ?? ''; ?>',
+              name: '<?php echo $_POST['name'] ?? ''; ?>',
+              email: '<?php echo $_POST['email'] ?? ''; ?>',
+              team: '<?php echo $_POST['team'] ?? ''; ?>',
+
+              messages: { 
+                solidId: {
+                  required: 'The SolidID is a required field!',
+                  minLength: 'The SolidID should be at least 7 characters long.',
+                  numeric: 'The SolidID only contains numbers.',
+                },
+                name: {
+                  required: 'It is required to provide a name.',
+                  minLength: 'Your name should at least be 10 characters long.',
+                },
+                email: {
+                  required: 'It is required to provide a email address.',
+                  email: 'This does\'t look like a valid email address.',
+                  network: 'Given email address does not belong to the UU network.',
+                },
+                team: {
+                  required: 'It is required to provide a team code.',
+                }
+              }
+            }
+          },
+
+          validations: {
+            solidId: {
+              required: validators.required,
+              minLength: validators.minLength(7),
+              numeric: validators.numeric,
+            },
+            name: {
+              required: validators.required,
+              minLength: validators.minLength(10),
+            },
+            email: {
+              required: validators.required,
+              email: validators.email,
+              network: function (value) {
+                return value.endsWith('.uu.nl') || value.endsWith('@uu.nl');
+              },
+            },
+            team: {
+              required: validators.required,
+            },
+          },
+
+          methods: {
+            submit: function () {
+              this.$v.$touch()
+              if (! this.$v.$invalid) {
+                this.$el.submit();
+              }
+            },
+          }
+        })
+      })();
+    </script>
 	</body>
 </html>
