@@ -125,12 +125,11 @@ $con->close();
                 <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="text" name="solisid" v-model.trim.lazy="$v.solidId.$model" required minlength="6" maxlength="8" value="<?php echo $solisid ?>" />
               </template>
             </form-group>
-            <div class="form-group row">
-              <label for="name" class="col-sm-2 col-form-label">Name</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" id="name" name="name" value="<?php echo $name ?>" />
-              </div>
-            </div>
+            <form-group class="form-group" :validator="$v.name" :messages="messages.name" label="Name">
+              <template slot-scope="{ validator, hasErrors }">
+                <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="text" name="name" v-model.trim.lazy="$v.name.$model" required value="<?php echo $name ?>" />
+              </template>
+            </form-group>
             <div class="form-group row">
               <label for="solisid" class="col-sm-2 col-form-label">SolisID</label>
               <div class="col-sm-10">
@@ -153,7 +152,7 @@ $con->close();
                 </ul>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary">Update</button>
+            <button class="btn btn-primary" @click.prevent="submit">Update</button>
           </form>
 				</div>
 			</div>
@@ -183,5 +182,60 @@ $con->close();
 		</div>
 
     <script src="js/app.js"></script>
+    <script>
+      (function () {
+        new Vue({
+          el: '#form',
+
+          data: function () {
+            return {
+              solidId: '<?php echo $_POST['solisid'] ?? ''; ?>',
+              name: '<?php echo $_POST['name'] ?? ''; ?>',
+
+              messages: {
+                solidId: {
+                  required: 'The SolidID is a required field!',
+                  minLength: 'The SolidID should be at least 7 characters long.'
+                },
+                name: {
+                  required: 'It is required to provide a name.',
+                  minLength: 'Your name should at least be 10 characters long.'
+                }
+              }
+            }
+          },
+
+          validations: {
+            solidId: {
+              required: validators.required,
+              minLength: validators.minLength(7),
+            },
+            name: {
+              required: validators.required,
+              minLength: validators.minLength(10),
+            },
+            email: {
+              required: validators.required,
+              email: validators.email,
+              network: function (value) {
+                return value.endsWith('.uu.nl') || value.endsWith('@uu.nl');
+              },
+            },
+            team: {
+              required: validators.required,
+            },
+          },
+
+          methods: {
+            submit: function () {
+              this.$v.$touch()
+              if (! this.$v.$invalid) {
+                this.$el.submit();
+              }
+            },
+          }
+        })
+      })();
+    </script>
 	</body>
 </html>

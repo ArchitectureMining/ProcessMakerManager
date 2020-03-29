@@ -180,7 +180,6 @@ if (isset($_POST['email']) && isset($_POST['team']) && isset($_POST['name']) && 
             solidId: {
               required: validators.required,
               minLength: validators.minLength(7),
-              numeric: validators.numeric,
             },
             name: {
               required: validators.required,
