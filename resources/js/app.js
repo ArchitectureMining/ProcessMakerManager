@@ -1,5 +1,7 @@
 import 'bootstrap';
 
+import jQuery from 'jquery';
+
 import Vue from 'vue';
 import Vuelidate from 'vuelidate';
 import * as validators from "vuelidate/lib/validators";
@@ -14,7 +16,4 @@ Vue.use(VuelidateErrorExtractor, {
 window.Vue = Vue;
 window.validators = validators;
 
-import {$,jQuery} from 'jquery';
-
-window.$ = $;
-window.jQuery = jQuery;
+window.$ = window.jQuery = jQuery;
