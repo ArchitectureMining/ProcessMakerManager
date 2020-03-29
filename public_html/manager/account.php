@@ -130,27 +130,17 @@ $con->close();
                 <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="text" name="name" v-model.trim.lazy="$v.name.$model" required />
               </template>
             </form-group>
-            <div class="form-group row">
-              <label for="solisid" class="col-sm-2 col-form-label">SolisID</label>
-              <div class="col-sm-10">
-                <input type="text" :validator="$v.solidId" :messages="messages.solidId" label="SolisID" class="form-control" id="solisid" name="solisid" value="<?php echo $solisid ?>" />
-              </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-control-plaintext" id="email" value="<?php echo $email ?>" />
             </div>
-            <div class="form-group row">
-              <label for="email" class="col-sm-2 col-form-label">Email</label>
-              <div class="col-sm-10">
-                <input type="email" class="form-control-plaintext" id="email" value="<?php echo $email ?>" />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="memberof" class="col-sm-2 col-form-label">Team</label>
-              <div class="col-sm-10">
-                <ul class="list-group">
+            <div class="form-group">
+              <label>Team</label>
+              <ul class="list-group">
 <?php foreach($teams as $t) { ?>
-                  <li class="list-group-item"><?php echo $t ?></li>
+                <li class="list-group-item"><?php echo $t ?></li>
 <?php } ?>
-                </ul>
-              </div>
+              </ul>
             </div>
             <button class="btn btn-primary" @click.prevent="submit">Update</button>
           </form>
