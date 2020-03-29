@@ -203,17 +203,7 @@ $con->close();
             name: {
               required: validators.required,
               minLength: validators.minLength(10),
-            },
-            email: {
-              required: validators.required,
-              email: validators.email,
-              network: function (value) {
-                return value.endsWith('.uu.nl') || value.endsWith('@uu.nl');
-              },
-            },
-            team: {
-              required: validators.required,
-            },
+            }
           },
 
           methods: {
