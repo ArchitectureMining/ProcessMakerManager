@@ -12,7 +12,10 @@
     "@fortawesome/fontawesome-free": "^5.13.0",
     "bootstrap": "^4.4.1",
     "jquery": "^3.4.1",
-    "popper.js": "^1.16.1"
+    "popper.js": "^1.16.1",
+    "vue": "^2.6.11",
+    "vuelidate": "^0.7.5",
+    "vuelidate-error-extractor": "^2.4.1"
   },
   "devDependencies": {
     "cross-env": "^7.0.2",
