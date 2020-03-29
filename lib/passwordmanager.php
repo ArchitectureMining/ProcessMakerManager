@@ -14,7 +14,7 @@ function createUser($con, $solisid, $name, $email, $password) {
   $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
   $insertUser = $con->prepare('INSERT INTO `user` (`solisid`, `name`, `email`, `password`, `sqlusername`) VALUES(?, ?, ?, ?, ?);');
-  $insertUser->bind_param('ssss', $_POST['solisid'], $_POST['name'], $_POST['email'], $hashedPassword, $mysqlUser);
+  $insertUser->bind_param('sssss', $_POST['solisid'], $_POST['name'], $_POST['email'], $hashedPassword, $mysqlUser);
   $result = $insertUser->execute();
 
   $return = array();

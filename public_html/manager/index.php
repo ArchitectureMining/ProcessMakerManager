@@ -5,7 +5,7 @@ session_start();
 $error = array();
 $errorstring = 'User / password combination is unknown';
 
-if (isset($_POST['login']) && isset($_POST['password'])) {
+if (isset($_POST['email']) && isset($_POST['password'])) {
   require_once('../../config.php');
 
   $con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
@@ -13,7 +13,7 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
     die('Failed to connect to MySQL: ' . mysqli_connect_error());
   }
 
-  $email = $_POST['login'];
+  $email = $_POST['email'];
 
   $stmt = $con->prepare('SELECT id, name, password, sqlusername FROM user WHERE email LIKE ?');
   $stmt->bind_param('s', $email);
