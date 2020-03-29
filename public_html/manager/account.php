@@ -189,7 +189,7 @@ $con->close();
 
           data: function () {
             return {
-              solidId: '<?php echo $$solisid ?? ''; ?>',
+              solidId: '<?php echo $solisid ?? ''; ?>',
               name: '<?php echo $name ?? ''; ?>',
 
               messages: {
