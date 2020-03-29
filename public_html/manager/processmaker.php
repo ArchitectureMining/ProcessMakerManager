@@ -150,28 +150,31 @@ $con->close();
 foreach($workspaces as $w) { ?>
               <tr>
 		            <th><?php echo ++$counter ?></th>
-		            <td><?php if ($w['status'] < 1) { ?>
+<?php if ($w['status'] < 1) { ?>
+		            <td>
                   <?php echo $w['name'] . ' (being created)'; ?>
-                <?php } else { ?>
-                  <a href="https://pais.science.uu.nl/sys<?php echo $w['id']?>/en/neoclassic/login/login" target="_blank"><?php echo $w['name'] ?></a> <?php if ($w['status'] == 2) { ?> (action requested) <?php }?></td>
-                  <?php } ?>
+                </td>
+                <td></td>
+<?php } else { ?>
+                  <td><a href="https://pais.science.uu.nl/sys<?php echo $w['id']?>/en/neoclassic/login/login" target="_blank"><?php echo $w['name'] ?></a> <?php if ($w['status'] == 2) { ?> (action requested) <?php }?></td>
                 <td>
-		  <a href="#" class="btn btn-outline-primary openResetPassword"  data-wid="<?php echo $w['id']?>" data-wname="<?php echo $w['name']?>" title="Reset admin password" data-toggle="modal" data-target="#resetAdmin">
-                    <svg class="bi bi-person" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd" d="M13 14s1 0 1-1-1-4-6-4-6 3-6 4 1 1 1 1h10zm-9.995-.944v-.002.002zM3.022 13h9.956a.274.274 0 00.014-.002l.008-.002c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664a1.05 1.05 0 00.022.004zm9.974.056v-.002.002zM8 7a2 2 0 100-4 2 2 0 000 4zm3-2a3 3 0 11-6 0 3 3 0 016 0z" clip-rule="evenodd"/>
-                      </svg>
-                  </a>
+		                <a href="#" class="btn btn-outline-primary openResetPassword"  data-wid="<?php echo $w['id']?>" data-wname="<?php echo $w['name']?>" title="Reset admin password" data-toggle="modal" data-target="#resetAdmin">
+                      <svg class="bi bi-person" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M13 14s1 0 1-1-1-4-6-4-6 3-6 4 1 1 1 1h10zm-9.995-.944v-.002.002zM3.022 13h9.956a.274.274 0 00.014-.002l.008-.002c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664a1.05 1.05 0 00.022.004zm9.974.056v-.002.002zM8 7a2 2 0 100-4 2 2 0 000 4zm3-2a3 3 0 11-6 0 3 3 0 016 0z" clip-rule="evenodd"/>
+                        </svg>
+                    </a>
                   <!--
                   <a href="#" class="btn btn-outline-secondary" title="Backup workspace"><i class="fas fa-cloud-download-alt"></i></a>
                   <a href="#" class="btn btn-outline-secondary" title="Restore workspace"><i class="fas fa-cloud-upload-alt"></i></a>
                   -->
-		  <a href="#" class="btn btn-outline-danger deleteWorkspace" data-wid="<?php echo $w['id']?>" data-wname="<?php echo $w['name']?>" title="Remove workspace" data-toggle="modal" data-target="#deleteWorkspace">
+		              <a href="#" class="btn btn-outline-danger deleteWorkspace" data-wid="<?php echo $w['id']?>" data-wname="<?php echo $w['name']?>" title="Remove workspace" data-toggle="modal" data-target="#deleteWorkspace">
                     <svg class="bi bi-trash" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                       <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z"/>
                       <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" clip-rule="evenodd"/>
                     </svg>
                   </a>
                 </td>
+<?php } ?>
 	      </tr>
 <?php } ?>
             </tbody>
