@@ -13,3 +13,8 @@ Vue.use(VuelidateErrorExtractor, {
 
 window.Vue = Vue;
 window.validators = validators;
+
+import {$,jQuery} from 'jquery';
+
+window.$ = $;
+window.jQuery = jQuery;

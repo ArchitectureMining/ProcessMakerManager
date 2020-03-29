@@ -113,7 +113,7 @@ if (isset($_POST['email']) && isset($_POST['team']) && isset($_POST['name']) && 
     			<form action="register.php" method="post" id="form">
             <form-group class="form-group" :validator="$v.solidId" :messages="messages.solidId" label="SolisID">
               <template slot-scope="{ validator, hasErrors }">
-                <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="text" name="solisid" v-model.trim.lazy="$v.solidId.$model" required minlength="8" maxlength="8" />
+                <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="text" name="solisid" v-model.trim.lazy="$v.solidId.$model" required minlength="6" maxlength="8" />
               </template>
             </form-group>
             <form-group class="form-group" :validator="$v.name" :messages="messages.name" label="Name">
@@ -154,7 +154,7 @@ if (isset($_POST['email']) && isset($_POST['team']) && isset($_POST['name']) && 
               email: '<?php echo $_POST['email'] ?? ''; ?>',
               team: '<?php echo $_POST['team'] ?? ''; ?>',
 
-              messages: { 
+              messages: {
                 solidId: {
                   required: 'The SolidID is a required field!',
                   minLength: 'The SolidID should be at least 7 characters long.',
