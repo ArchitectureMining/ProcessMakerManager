@@ -153,20 +153,14 @@ $con->close();
               Change password
             </div>
             <div class="card-body">
-              <div class="form-group row">
-                <label for="password" class="col-sm-3 col-form-label">Password</label>
-                <div class="col-sm-9">
-                  <input type="password" class="form-control" id="password" name="password" value=""/>
-                </div>
-              </div>
               <form-group class="form-group" :validator="$v.password" :messages="messages.password" label="Password">
                 <template slot-scope="{ validator, hasErrors }">
-                  <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="password" name="solisid" v-model.trim.lazy="$v.password.$model" required />
+                  <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="password" name="password" v-model.trim.lazy="$v.password.$model" required />
                 </template>
               </form-group>
               <form-group class="form-group" :validator="$v.retypePassword" :messages="messages.password" label="Retype password">
                 <template slot-scope="{ validator, hasErrors }">
-                  <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="password" name="solisid" v-model.trim.lazy="$v.retypePassword.$model" required />
+                  <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="password" name="retypePassword" v-model.trim.lazy="$v.retypePassword.$model" required />
                 </template>
               </form-group>
               <button type="submit" name="change" class="btn btn-primary disabled">Change</button>
