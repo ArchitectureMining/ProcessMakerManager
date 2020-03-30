@@ -119,7 +119,7 @@ $con->close();
 <?php } ?>
       </ul></div>
 <?php } ?>
-          <form action="account.php" method="post" id="form">
+          <form action="account.php" method="post" id="account-form">
             <form-group class="form-group" :validator="$v.solidId" :messages="messages.solidId" label="SolisID">
               <template slot-scope="{ validator, hasErrors }">
                 <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="text" name="solisid" v-model.trim.lazy="$v.solidId.$model" required minlength="6" maxlength="8" />
@@ -148,7 +148,7 @@ $con->close();
 			</div>
       <div class="col-8 py-3">
         <div class="card">
-          <form action="account.php" method="post">
+          <form action="account.php" method="post" id="password-form">
             <div class="card-header">
               Change password
             </div>
@@ -159,12 +159,16 @@ $con->close();
                   <input type="password" class="form-control" id="password" name="password" value=""/>
                 </div>
               </div>
-              <div class="form-group row">
-                <label for="retypePassword" class="col-sm-3 col-form-label">Retype password</label>
-                <div class="col-sm-9">
-                  <input type="password" class="form-control" id="retypePassword" name="retypePassword" value=""/>
-                </div>
-              </div>
+              <form-group class="form-group" :validator="$v.password" :messages="messages.password" label="Password">
+                <template slot-scope="{ validator, hasErrors }">
+                  <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="password" name="solisid" v-model.trim.lazy="$v.password.$model" required />
+                </template>
+              </form-group>
+              <form-group class="form-group" :validator="$v.retypePassword" :messages="messages.password" label="Retype password">
+                <template slot-scope="{ validator, hasErrors }">
+                  <input class="form-control" :class="{ 'is-invalid': hasErrors && validator.$dirty, 'is-valid': !hasErrors && validator.$dirty }" type="password" name="solisid" v-model.trim.lazy="$v.retypePassword.$model" required />
+                </template>
+              </form-group>
               <button type="submit" name="change" class="btn btn-primary disabled">Change</button>
             </div>
           </form>
@@ -175,7 +179,7 @@ $con->close();
     <script>
       (function () {
         new Vue({
-          el: '#form',
+          el: '#account-form',
 
           data: function () {
             return {
@@ -203,6 +207,45 @@ $con->close();
             name: {
               required: validators.required,
               minLength: validators.minLength(10),
+            }
+          },
+
+          methods: {
+            submit: function () {
+              this.$v.$touch()
+              if (! this.$v.$invalid) {
+                this.$el.submit();
+              }
+            },
+          }
+        })
+      })();
+
+      (function () {
+        new Vue({
+          el: '#password-form',
+
+          data: function () {
+            return {
+              password: null,
+              retypePassword: null,
+
+              messages: {
+                password: {
+                  required: 'You must provide a password!',
+                  matches: 'The passwords do not match.',
+                },
+              }
+            }
+          },
+
+          validations: {
+            password: {
+              required: validators.required,
+            },
+            retypePassword: {
+              required: validators.required,
+              matches: validators.sameAs('password'),
             }
           },
 
