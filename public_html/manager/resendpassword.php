@@ -8,19 +8,19 @@ if (isset($_POST['email'])) {
   	exit('Failed to connect to MySQL: ' . mysqli_connect_error());
 	}
 
-	$stmt = $con->prepare('SELECT id, name FROM user WHERE email=?');
+	$stmt = $con->prepare('SELECT id, name,sqlusername FROM user WHERE email=?');
 	$stmt->bind_param('s', $_POST['email']);
 	$stmt->execute();
 	$stmt->store_result();
 
 	if ($stmt->num_rows > 0) {
 		// User exists!
-		$stmt->bind_result($userid, $username);
+		$stmt->bind_result($userid, $username, $sqluser);
 		$stmt->fetch();
 
 		require_once('../../lib/passwordmanager.php');
 
-		createAndSendNewPassword($con, $userid, $username, $_POST['email']);
+		createAndSendNewPassword($con, $userid, $username, $sqluser, $_POST['email']);
 
 		$stmt->close();
 
@@ -84,7 +84,7 @@ if (isset($_POST['email'])) {
 	            return {
 	              email: '<?php echo $_POST['email'] ?? ''; ?>',
 
-	              messages: { 
+	              messages: {
 	                email: {
 	                  required: 'You forgot to provide your email address.',
 	                  email: 'This does\'t look like a valid email address.',

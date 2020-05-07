@@ -54,7 +54,7 @@ function addUserToTeam($con, $user, $team) {
 }
 
 
-function createAndSendNewPassword($con, $userid, $name, $email) {
+function createAndSendNewPassword($con, $userid, $sqlusername, $name, $email) {
   $password = generateRandomString(16);
 
   $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -65,6 +65,7 @@ function createAndSendNewPassword($con, $userid, $name, $email) {
   $stmt->close();
 
   if ($result) {
+    updateMysqlUser($con, $sqlusername, $password);
     sendPassword($name, $email, $password);
     return true;
   } else {
