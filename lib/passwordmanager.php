@@ -54,7 +54,7 @@ function addUserToTeam($con, $user, $team) {
 }
 
 
-function createAndSendNewPassword($con, $userid, $sqlusername, $name, $email) {
+function createAndSendNewPassword($con, $userid, $name, $sqlusername, $email) {
   $password = generateRandomString(16);
 
   $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
