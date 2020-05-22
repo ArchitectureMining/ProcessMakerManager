@@ -11,7 +11,7 @@ $workspaces = array();
 
 // If the workspaces are given on the command line, use those
 if ($_SERVER['argc'] > 1) {
-	for($i = 0 ; $i < $_SERVER['argc'] ; $i++ ) {
+	for($i = 1 ; $i < $_SERVER['argc'] ; $i++ ) {
 		$workspaces[] = $_SERVER['argv'][$i];
 	}
 } else {
