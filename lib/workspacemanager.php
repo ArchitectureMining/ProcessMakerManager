@@ -134,4 +134,20 @@ function removeWorkspace($con, $workspace) {
 	}
 }
 
+function backupWorkspace($con, $workspace) {
+	if (!workspaceExists($con, $workspace)) {
+		return false;
+	}
 
+	global $processmaker_cmd, $backup_dir;
+
+	$backupfile = $backup_dir . '/' . date('Ymd_Hi') . '_' . $workspace . '.tar';
+
+	$command = $processmaker_cmd . ' workspace-backup ' . $workspace . ' ' . $backupfile;
+
+	$output = '';
+	$return = 0;
+
+	exec($command, $output, $return);
+
+}

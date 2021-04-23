@@ -11,9 +11,9 @@ $processmaker_cmd = '/dir/to/processmaker';
 
 $processmaker_shared = '/dir/to/the/shared/folder';
 
-
 $supervisor_dir = '/dir/to/store/config/for/supervisor.d/';
 $supervisor_template = '/dir/to/supervisor/template/supervisor.template';
 
+$backup_dir = '/dir/to/backups';
 
 ?>
