@@ -16,7 +16,7 @@ if ($_SERVER['argc'] > 1) {
 	}
 } else {
 	// get the workspaces from the database
-  $q = $con->query("SELECT `id` FROM `workspace` WHERE `checked`=0");
+  $q = $con->query("SELECT `id` FROM `workspace`");
 
   while($result = $q->fetch_assoc()) {
   	$workspaces[] = $result['id'];
@@ -24,17 +24,7 @@ if ($_SERVER['argc'] > 1) {
   $q->close();
 }
 
-$template = file_get_contents($supervisor_template) or die('Could not read template from: '.$supervisor_template);
-
 foreach($workspaces as $workspace) {
-	$configfilename = $supervisor_dir.'/'.$workspace.'.conf';
-
-	var_dump($configfilename);
-	
-	if (!file_exists($configfilename)) {
-		$content = str_replace('%%workspace%%', $workspace, $template);
-		file_put_contents($configfilename, $content);
-	}
+	$cmd = 'cd '. $processmaker_dir. '; '.$processmaker_cmd.' artisan queue:work --stop-when-empty --workspace='.$workspace;
+	exec($cmd);
 }
-
-$con->close();

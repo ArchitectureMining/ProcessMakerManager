@@ -140,7 +140,7 @@ $con->close();
           <table class="table table-striped table-hover">
             <thead>
               <tr>
-                <th>#</th>
+                <th>ID</th>
                 <th>Workspace</th>
                 <th>Database</th>
                 <th>Actions</th>
@@ -150,7 +150,7 @@ $con->close();
 <?php $counter = 0;
 foreach($workspaces as $w) { ?>
               <tr>
-		            <th><?php echo ++$counter ?></th>
+		            <th><?php ++$counter; echo $w['id'] ?></th>
 <?php if ($w['status'] < 1) { ?>
 		            <td>
                   <?php echo $w['name'] . ' (being created)'; ?>

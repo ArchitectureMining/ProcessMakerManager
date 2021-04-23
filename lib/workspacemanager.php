@@ -28,7 +28,7 @@ function resetPassword($con, $workspace, $password) {
 
 	$database = $con->real_escape_string('wf_'.$workspace);
 
-	$stmtUsers = $con->prepare("UPDATE `".$database."`.`USERS` SET `USR_USERNAME` = 'admin', `USR_PASSWORD` = md5(?) WHERE `USR_UID` = '00000000000000000000000000000001';");
+	$stmtUsers = $con->prepare("UPDATE `".$database."`.`USERS` SET `USR_USERNAME` = 'admin', `USR_PASSWORD` = md5(?) WHERE `USR_UID` = '00000000000000000000000000000001';") ;
 	$stmtUsers->bind_param('s', $password);
 	$result = $stmtUsers->execute();
 	if (!$result) {
