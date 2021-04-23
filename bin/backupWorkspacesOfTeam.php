@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 
-if ($_SERVER['argc'] < 1) {
+if ($_SERVER['argc'] < 2) {
 	echo 'Usage of this script: ./'.$_SERVER['argv'][0].' <team id>'.PHP_EOL;
 	echo '  team id should be at most 8 characters long'.PHP_EOL;
 	echo '  (c) 2020, Jan Martijn van der Werf, Utrecht University'.PHP_EOL;
@@ -21,7 +21,7 @@ if (mysqli_connect_errno()) {
 $team = $_SERVER['argv'][1];
 
 
-$query = 'SELECT * FROM `workspace` WHERE `user` IN (SELECT `user` FROM memberof AS mm INNER JOIN team AS t ON mm.team = t.id WHERE t.code = "'.$team.'") LIMIT 0, 5';
+$query = 'SELECT * FROM `workspace` WHERE `user` IN (SELECT `user` FROM memberof AS mm INNER JOIN team AS t ON mm.team = t.id WHERE t.code = "'.$team.'")';
 
 $q = $con->query($query);
 
@@ -29,8 +29,14 @@ if (!$q) {
 	die('Error while executing query: ' . $con->error);
 }
 
+$counter = 0;
+
 while($workspace = $q->fetch_object()) {
 	backupWorkspace($con, $workspace->id);
+	echo "backup workspace: ".$workspace->id.PHP_EOL;
+	$counter++;
 }
+
+echO PHP_EOL."Backup of: ".$counter." workspaces".PHP_EOL;
 
 ?>
