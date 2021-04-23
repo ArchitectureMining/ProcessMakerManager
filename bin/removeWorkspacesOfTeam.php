@@ -21,7 +21,7 @@ if (mysqli_connect_errno()) {
 $team = $_SERVER['argv'][1];
 
 
-$query = 'SELECT * FROM `workspace` WHERE `user` IN (SELECT `user` FROM memberof AS mm INNER JOIN team AS t ON mm.team = t.id WHERE t.code = "'.$team.'") LIMIT 0, 5';
+$query = 'SELECT * FROM `workspace` WHERE `user` IN (SELECT `user` FROM memberof AS mm INNER JOIN team AS t ON mm.team = t.id WHERE t.code = "'.$team.'")';
 
 $q = $con->query($query);
 
